@@ -59,7 +59,6 @@ class CouchCrasher:
         """
         Install the payload.
         """
-
         persistence: Persistence = self._os_variants[self._current_os](
             payload=self._payload,
             effective_user_id=self._effective_user_id
