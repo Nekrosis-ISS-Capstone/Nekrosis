@@ -4,7 +4,7 @@ couchcrasher.py: Entry point for the CouchCrasher application.
 Usage:
     couchcrasher.py <payload> [--custom-method=<method>]
     couchcrasher.py (-h | --help)
-    couchcrasher.py --version
+    couchcrasher.py (-v | --version)
 """
 
 import os
