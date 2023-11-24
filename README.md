@@ -24,6 +24,10 @@ Repository for the Couch Crasher application. Information Systems Security Capst
   - Call library to perform persistence.
 - `core.py`: Parent class for OS-specific persistence classes.
   - Defines structures such as required methods for child classes.
+  - Public functions (child classes must implement):
+    - `supported_persistence_methods()`: Returns a list of supported persistence methods.
+    - `configured_persistence_method()`: Returns the persistence method currently in use.
+    - `install()`: Installs payload for persistence.
 - `windows.py`: Windows-specific persistence class.
   - Inherits from `core.py`.
 - `linux.py`: Linux-specific persistence class.
