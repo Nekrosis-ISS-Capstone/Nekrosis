@@ -30,7 +30,10 @@ Repository for the Couch Crasher application. Information Systems Security Capst
     - `install()`: Installs payload for persistence.
 - `windows.py`: Windows-specific persistence class.
   - Inherits from `core.py`.
+  - User privileges are determined by SID (Security Identifier).
 - `linux.py`: Linux-specific persistence class.
   - Inherits from `core.py`.
+  - User privileges are determined by EUID (Effective User Identifier).
 - `macos.py`: macOS-specific persistence class.
   - Inherits from `core.py`.
+  - User privileges are determined by EUID (Effective User Identifier).

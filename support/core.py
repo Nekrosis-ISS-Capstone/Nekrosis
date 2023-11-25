@@ -8,13 +8,13 @@ class Persistence:
 
     Parameters:
         payload:            The payload to install.
-        effective_user_id:  The effective user ID.
+        identifier:         The effective user ID on Unix, or Security Identifier (SID) on Windows.
         custom_method:      The custom persistence method to use.
     """
 
-    def __init__(self, payload: str, effective_user_id: int, custom_method: str = None) -> None:
+    def __init__(self, payload: str, identifier: int, custom_method: str = None) -> None:
         self.payload = payload
-        self.effective_user_id = effective_user_id
+        self.identifier = identifier
         self.custom_method = custom_method
 
         self.recommended_method = self._determine_recommended_persistence_method()
@@ -24,14 +24,14 @@ class Persistence:
         """
         Determine the recommended persistence method for the current OS.
         """
-        raise NotImplementedError(f"Not implemented in current class ({self.__class__.__name__})")
+        return f"_determine_recommended_persistence_method() Not implemented in current class ({self.__class__.__name__})"
 
 
     def supported_persistence_methods(self) -> list:
         """
         Get a list of supported persistence methods for the current OS.
         """
-        raise NotImplementedError(f"Not implemented in current class ({self.__class__.__name__})")
+        return [f"supported_persistence_methods() Not implemented in current class ({self.__class__.__name__})"]
 
 
     def configured_persistence_method(self) -> str:
@@ -50,4 +50,4 @@ class Persistence:
         """
         Install the payload.
         """
-        raise NotImplementedError(f"Not implemented in current class ({self.__class__.__name__})")
+        print(f"install() not implemented in current class ({self.__class__.__name__})")

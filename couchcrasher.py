@@ -2,7 +2,7 @@
 couchcrasher.py: Entry point for the CouchCrasher application.
 
 Usage:
-    couchcrasher.py <payload> [--custom-method=<method>]
+    couchcrasher.py (-p | --payload) <payload> [--custom-method <method>]
     couchcrasher.py (-h | --help)
     couchcrasher.py (-v | --version)
 """
@@ -10,6 +10,7 @@ Usage:
 import os
 import sys
 import argparse
+import subprocess
 
 from pathlib import Path
 
@@ -37,15 +38,15 @@ class CouchCrasher:
         self._payload       = payload
         self._custom_method = custom_method
 
-        self._effective_user_id = self._get_effective_user_id()
-        self._current_os        = self._get_os()
+        self._identifier = self._get_privileges()
+        self._current_os = self._get_os()
 
         if self._current_os not in SUPPORTED_HOSTS:
             raise NotImplementedError(f"OS {self._current_os} is not supported.")
 
         self.persistence_obj: Persistence = SUPPORTED_HOSTS[self._current_os](
             payload=self._payload,
-            effective_user_id=self._effective_user_id,
+            identifier=self._identifier,
             custom_method=self._custom_method
         )
 
@@ -65,25 +66,36 @@ class CouchCrasher:
         return sys.platform
 
 
-    def _get_effective_user_id(self) -> int:
+    def _get_privileges(self) -> int:
         """
-        Get the effective user ID.
+        Get privileges for the current user.
+        - Unix: returns the effective user ID.
+        - Windows: returns the Secure Identifier (SID) of the current user.
         """
-        return os.geteuid()
+        if hasattr(os, "geteuid"):
+            return os.geteuid()
+
+        user = os.getlogin()
+        results = subprocess.run(
+            ["powershell", "-Command", f"Get-WMIObject win32_useraccount -Filter \"Name='{user}'\" | Select SID"],
+            capture_output=True,
+            text=True
+        ).stdout.strip().split("\n")
+
+        return results[2]
 
 
     def run(self) -> None:
         """
         Install the payload.
         """
-
         self._verify_payload()
 
         print("Creating persistence")
         print(f"  Payload: {self._payload}")
         print(f"  OS: {self._current_os}")
-        print(f"  Effective User ID: {self._effective_user_id}")
-        print(f"  Persistence Method: {self.persistence_obj.configured_persistence_method()}")
+        print((f"  Effective User ID:" if self._current_os != "win32" else "  Security Identifier:") + f" {self._identifier}")
+        print(f'  Persistence Method: "{self.persistence_obj.configured_persistence_method()}"')
 
         self.persistence_obj.install()
 
@@ -137,4 +149,7 @@ if __name__ == "__main__":
     if args.supported_methods:
         couchcrasher.supported_persistence_methods()
     else:
+        if not args.payload:
+            parser.print_help()
+            exit(1)
         couchcrasher.run()

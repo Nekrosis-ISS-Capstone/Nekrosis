@@ -8,7 +8,9 @@ from support.core import Persistence
 class LinuxPersistence(Persistence):
     """
     Linux-specific persistence logic.
+
+    identifier: Effective user ID of the user to install the payload as.
     """
 
-    def __init__(self, payload: str, effective_user_id: int, custom_method: str = None) -> None:
-        super().__init__(payload, effective_user_id, custom_method)
+    def __init__(self, payload: str, identifier: int, custom_method: str = None) -> None:
+        super().__init__(payload, identifier, custom_method)
