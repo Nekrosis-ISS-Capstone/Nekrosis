@@ -12,7 +12,7 @@ class Persistence:
         custom_method:      The custom persistence method to use.
     """
 
-    def __init__(self, payload: str, identifier: int, custom_method: str = None) -> None:
+    def __init__(self, payload: str, identifier: int | str, custom_method: str = None) -> None:
         self.payload = payload
         self.identifier = identifier
         self.custom_method = custom_method

@@ -66,7 +66,7 @@ class CouchCrasher:
         return sys.platform
 
 
-    def _get_privileges(self) -> int:
+    def _get_privileges(self) -> int | str:
         """
         Get privileges for the current user.
         - Unix: returns the effective user ID.
