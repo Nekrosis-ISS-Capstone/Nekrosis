@@ -1,0 +1,1 @@
+py_sip_xnu>=1.0.4; sys_platform == 'darwin'

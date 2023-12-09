@@ -7,6 +7,12 @@ import platform
 
 from support.core import Persistence
 
+# Only import py_sip_xnu if we're running on macOS.
+try:
+    import py_sip_xnu
+except ImportError:
+    py_sip_xnu = None
+
 
 class MacPersistenceMethods(enum.Enum):
     """
@@ -17,9 +23,9 @@ class MacPersistenceMethods(enum.Enum):
     LAUNCH_AGENT_LIBRARY  = "LaunchAgent - Library"
     LAUNCH_DAEMON_LIBRARY = "LaunchDaemon - Library"
 
-    # Requires System Integrity Protection (SIP) to be disabled.
-    LAUNCH_AGENT_SYSTEM   = "LaunchAgent - System"
-    LAUNCH_DAEMON_SYSTEM  = "LaunchDaemon - System"
+    if py_sip_xnu and py_sip_xnu.SipXnu().sip_object.can_edit_root:
+        LAUNCH_AGENT_SYSTEM   = "LaunchAgent - System"
+        LAUNCH_DAEMON_SYSTEM  = "LaunchDaemon - System"
 
 
 class MacPersistence(Persistence):
@@ -49,6 +55,9 @@ class MacPersistence(Persistence):
         # If we lack root access, we can only use user-level persistence methods.
         if self.identifier != 0:
             return MacPersistenceMethods.LAUNCH_AGENT_USER.value
+
+        if "LaunchDaemon - System" in self.supported_persistence_methods():
+            return MacPersistenceMethods.LAUNCH_DAEMON_SYSTEM.value
 
         return MacPersistenceMethods.LAUNCH_DAEMON_LIBRARY.value
 
