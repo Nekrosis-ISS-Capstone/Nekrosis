@@ -132,8 +132,8 @@ if __name__ == "__main__":
         version=f"CouchCrasher v{PROJECT_VERSION}",
     )
     parser.add_argument(
-        "-s",
-        "--supported-methods",
+        "-l",
+        "--list-supported-methods",
         action="store_true",
         help="List the supported persistence methods for the current OS."
     )
@@ -146,7 +146,7 @@ if __name__ == "__main__":
         custom_method=args.method
     )
 
-    if args.supported_methods:
+    if args.list_supported_methods:
         couchcrasher.supported_persistence_methods()
     else:
         if not args.payload:
