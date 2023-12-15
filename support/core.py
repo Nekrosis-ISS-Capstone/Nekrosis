@@ -24,14 +24,14 @@ class Persistence:
         """
         Determine the recommended persistence method for the current OS.
         """
-        return f"_determine_recommended_persistence_method() Not implemented in current class ({self.__class__.__name__})"
+        return f"_determine_recommended_persistence_method() not implemented in current class ({self.__class__.__name__})"
 
 
     def supported_persistence_methods(self) -> list:
         """
         Get a list of supported persistence methods for the current OS.
         """
-        return [f"supported_persistence_methods() Not implemented in current class ({self.__class__.__name__})"]
+        return [f"supported_persistence_methods() not implemented in current class ({self.__class__.__name__})"]
 
 
     def configured_persistence_method(self) -> str:
