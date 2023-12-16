@@ -2,6 +2,9 @@
 core.py: Class Structure for OS persistence logic.
 """
 
+import tempfile
+
+
 class Persistence:
     """
     Base class for OS-specific persistence logic.
@@ -16,6 +19,8 @@ class Persistence:
         self.payload = payload
         self.identifier = identifier
         self.custom_method = custom_method
+
+        self.temp_dir = tempfile.TemporaryDirectory()
 
         self.recommended_method = self._determine_recommended_persistence_method()
 
