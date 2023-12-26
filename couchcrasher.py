@@ -96,6 +96,11 @@ class CouchCrasher:
         if len(results) < 3:
             raise ValueError(f"Unexpected output from powershell:\n{results}")
 
+        # Security Identifiers must start with "S-"
+        # https://learn.microsoft.com/en-us/windows-server/identity/ad-ds/manage/understand-security-identifiers
+        if not results[2].startswith("S-"):
+            raise ValueError(f"Unexpected output from powershell:\n{results}")
+
         return results[2]
 
 
