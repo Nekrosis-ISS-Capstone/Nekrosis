@@ -72,8 +72,8 @@ class MacPersistence(Persistence):
         if self.identifier != 0:
             return MacPersistenceMethods.LAUNCH_AGENT_USER.value
 
-        if py_sip_xnu.SipXnu().sip_object.can_edit_root:
-            return MacPersistenceMethods.LAUNCH_DAEMON_SYSTEM.value
+        # if py_sip_xnu.SipXnu().sip_object.can_edit_root:
+        #     return MacPersistenceMethods.LAUNCH_DAEMON_SYSTEM.value
 
         return MacPersistenceMethods.LAUNCH_DAEMON_LIBRARY.value
 
