@@ -93,6 +93,9 @@ class CouchCrasher:
             text=True
         ).stdout.strip().split("\n")
 
+        if len(results) < 3:
+            raise ValueError(f"Unexpected output from powershell:\n{results}")
+
         return results[2]
 
 
