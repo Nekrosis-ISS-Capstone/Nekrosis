@@ -27,4 +27,4 @@ jobs:
         run: python3 couchcrasher.py --list-supported-methods
 
       - name: Validate (Install Payload)
-        run: python3 couchcrasher.py --payload couchcrasher.py
+        run: sudo python3 couchcrasher.py --payload couchcrasher.py
