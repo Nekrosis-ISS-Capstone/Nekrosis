@@ -217,6 +217,9 @@ class MacPersistence(Persistence):
 
 
     def install(self) -> None:
+        """
+        Install payload.
+        """
         method = self.configured_persistence_method()
 
         if method in [

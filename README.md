@@ -42,6 +42,9 @@ Repository for the Couch Crasher application. Information Systems Security Capst
 
 ## Setup
 
+Requires Python 3.6+, please install from official website: [python.org](https://www.python.org/downloads/).
+
+
 ```sh
 # Base dependencies
 pip install -r requirements.txt
