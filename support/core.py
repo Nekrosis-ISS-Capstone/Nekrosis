@@ -44,8 +44,9 @@ class Persistence:
         Get the best persistence method for the current OS.
         """
         if self.custom_method:
-            if self.custom_method not in self.supported_persistence_methods():
-                raise ValueError(f"Custom method {self.custom_method} is not supported.")
+            methods = self.supported_persistence_methods()
+            if self.custom_method not in methods:
+                raise ValueError(f"Custom method {self.custom_method} is not supported.\nSupported methods:\n" + "\n".join([f'  "{method}"' for method in methods]))
             return self.custom_method
 
         return self.recommended_method
