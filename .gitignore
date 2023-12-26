@@ -1,3 +1,5 @@
 .DS_Store
 __pycache__
 /samples/darwin/simple-popup/simple-popup
+/dist
+/build

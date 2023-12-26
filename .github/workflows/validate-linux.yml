@@ -23,8 +23,14 @@ jobs:
       - name: Set up Python 3 libraries
         run: pip3 install -r requirements.txt
 
+      - name: Set up PyInstaller
+        run: pip3 install pyinstaller
+
+      - name: Build portable executable
+        run: pyinstaller couchcrasher.spec
+
       - name: Validate (List supported persistence methods)
-        run: python3 couchcrasher.py --list-supported-methods
+        run: dist/couchcrasher --list-supported-methods
 
       - name: Validate (Install Payload)
-        run: python3 couchcrasher.py --payload couchcrasher.py
+        run: dist/couchcrasher --payload couchcrasher.py
