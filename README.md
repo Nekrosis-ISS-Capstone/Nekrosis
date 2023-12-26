@@ -2,6 +2,7 @@
 
 Repository for the Couch Crasher application. Information Systems Security Capstone Project for Winter 2024.
 
+
 ## Project Goals
 
 * Multi-platform persistence toolkit.
@@ -37,3 +38,76 @@ Repository for the Couch Crasher application. Information Systems Security Capst
 - `macos.py`: macOS-specific persistence class.
   - Inherits from `core.py`.
   - User privileges are determined by EUID (Effective User Identifier).
+
+
+## Setup
+
+```sh
+# Base dependencies
+pip install -r requirements.txt
+
+# If creating standalone executable, install pyinstaller
+pip install pyinstaller
+```
+
+
+## Usage
+
+#### Help
+```
+$ couchcrasher.py (-h | --help)
+
+>>> usage: couchcrasher [-h] [-p PAYLOAD] [-m METHOD] [-v] [-l]
+>>>
+>>> Install a payload for persistence on Windows, macOS, or Linux.
+>>>
+>>> options:
+>>>   -h, --help            show this help message and exit
+>>>   -p PAYLOAD, --payload PAYLOAD
+>>>                         The payload to install.
+>>>   -m METHOD, --method METHOD
+>>>                         The custom persistence method to use (optional).
+>>>   -v, --version         show program's version number and exit
+>>>   -l, --list-supported-methods
+>>>                         List the supported persistence methods for the current OS.
+```
+
+
+#### Version
+
+```
+$ couchcrasher.py (-v | --version)
+
+>>> CouchCrasher v0.0.1
+```
+
+
+#### List Supported Methods
+
+Dependant on OS and privileges of current user.
+```
+$ couchcrasher.py (-l | --list-supported-methods)
+
+>>> Supported persistence methods for darwin:
+>>>   "LaunchAgent - Current User"
+>>>   "LaunchAgent - Library"
+>>>   "LaunchDaemon - Library"
+```
+
+
+#### Install Payload
+
+Best method determined by privilege and other environmental factors if no method is specified.
+```
+$ couchcrasher.py (-p | --payload) <malware> (-m | --method) <method>
+
+>>> Creating persistence
+>>>   Payload: <malware>
+>>>   OS: darwin
+>>>   Effective User ID: 501
+>>>   Persistence Method: "LaunchAgent - Current User"
+>>> Installing launch service (LaunchAgent - Current User)
+>>>   Relocated payload: /Users/target/Library/LaunchAgents/713753
+>>>   Service file: /Users/target/Library/LaunchAgents/com.80309.plist
+>>>   Service started successfully 🎉
+```
