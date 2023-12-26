@@ -88,10 +88,15 @@ Dependant on OS and privileges of current user.
 ```
 $ couchcrasher.py (-l | --list-supported-methods)
 
->>> Supported persistence methods for darwin:
+>>> Supported persistence methods for macOS:
 >>>   "LaunchAgent - Current User"
 >>>   "LaunchAgent - Library"
 >>>   "LaunchDaemon - Library"
+>>>
+>>> Recommended persistence method for macOS:
+>>>   "LaunchDaemon - Library"
+>>>
+>>> If missing methods, re-run with elevated privileges (if applicable).
 ```
 
 
@@ -103,7 +108,7 @@ $ couchcrasher.py (-p | --payload) <malware> (-m | --method) <method>
 
 >>> Creating persistence
 >>>   Payload: <malware>
->>>   OS: darwin
+>>>   OS: macOS
 >>>   Effective User ID: 501
 >>>   Persistence Method: "LaunchAgent - Current User"
 >>> Installing launch service (LaunchAgent - Current User)
