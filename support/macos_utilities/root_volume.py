@@ -7,9 +7,9 @@ import subprocess
 from support.macos_utilities.os_versioning import XNUVersions
 
 
-BIN_MOUNT:     str = "/sbin/mount"
-BIN_BLESS:     str = "/usr/sbin/bless"
-BIN_DISKUTIL:  str = "/usr/sbin/diskutil"
+BIN_MOUNT:    str = "/sbin/mount"
+BIN_BLESS:    str = "/usr/sbin/bless"
+BIN_DISKUTIL: str = "/usr/sbin/diskutil"
 
 
 class RootVolume:
