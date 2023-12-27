@@ -119,7 +119,7 @@ class CouchCrasher:
         self.persistence_obj.install()
 
 
-    def supported_persistence_methods(self) -> list:
+    def list_supported_persistence_methods(self) -> None:
         """
         Get a list of supported persistence methods for the current OS.
         """
@@ -171,7 +171,7 @@ if __name__ == "__main__":
     )
 
     if args.list_supported_methods:
-        couchcrasher.supported_persistence_methods()
+        couchcrasher.list_supported_persistence_methods()
     else:
         if not args.payload:
             parser.print_help()
