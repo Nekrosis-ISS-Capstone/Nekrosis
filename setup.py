@@ -19,6 +19,8 @@ setup(
     name="couchcrasher",
     version=get_version(),
     description="Multi-platform persistence tool for user-provided payloads.",
+    long_description_content_type="text/markdown",
+    long_description=open("README.md", "r").read(),
     author="Ezra Fast, Mitchell Nicholson, Mykola Grymalyuk, Scott Banister and Ulysses Hill",
     author_email="",
     url="https://github.com/Couch-Crasher-ISS-Capstone/Couch-Crasher-Code",
