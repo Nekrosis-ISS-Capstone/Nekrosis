@@ -9,7 +9,7 @@ on:
 jobs:
   build:
     name: Validate Wheel
-    runs-on: linux-latest
+    runs-on: ubuntu-latest
     env:
       branch: ${{ github.ref }}
     steps:
