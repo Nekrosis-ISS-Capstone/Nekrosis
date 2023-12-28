@@ -117,7 +117,7 @@ class CouchCrasher:
 
         print("Creating persistence")
         print(f"  Payload: {self._payload}")
-        print(f"  OS: {self._friendly_os(self._current_os)}")
+        print(f"  OS: {self._friendly_os_name}")
         print((f"  Effective User ID:" if self._current_os != "win32" else "  Security Identifier:") + f" {self._identifier}")
         print(f'  Persistence Method: "{self.persistence_obj.configured_persistence_method()}"')
 
