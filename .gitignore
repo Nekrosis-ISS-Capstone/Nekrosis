@@ -3,3 +3,4 @@ __pycache__
 /samples/darwin/simple-popup/simple-popup
 /dist
 /build
+*.egg-info

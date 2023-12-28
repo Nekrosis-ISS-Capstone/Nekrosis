@@ -2,6 +2,13 @@
 
 Repository for the Couch Crasher application. Information Systems Security Capstone Project for Winter 2024.
 
+Authors:
+* [Ezra Fast](https://github.com/EzraFast1)
+* [Mitchell Nicholson](https://github.com/1Kalagen1)
+* [Mykola Grymalyuk](https://github.com/khronokernel)
+* [Scott Banister](https://github.com/pleasantriess)
+* [Ulysses Hill](https://github.com/Ulysses-Hill)
+
 
 ## Project Goals
 
@@ -44,19 +51,21 @@ Repository for the Couch Crasher application. Information Systems Security Capst
 
 Requires Python 3.6+, please install from official website: [python.org](https://www.python.org/downloads/).
 
-
 ```sh
 # Base dependencies
 pip install -r requirements.txt
 
 # If creating standalone executable, install pyinstaller
 pip install pyinstaller
+
+# If creating wheel, install build
+pip install build
 ```
 
 
 ## Usage
 
-#### Help
+### Help
 ```
 $ couchcrasher.py (-h | --help)
 
@@ -76,7 +85,7 @@ $ couchcrasher.py (-h | --help)
 ```
 
 
-#### Version
+### Version
 
 ```
 $ couchcrasher.py (-v | --version)
@@ -85,7 +94,7 @@ $ couchcrasher.py (-v | --version)
 ```
 
 
-#### List Supported Methods
+### List Supported Methods
 
 Dependant on OS and privileges of current user.
 ```
@@ -103,7 +112,7 @@ $ couchcrasher.py (-l | --list-supported-methods)
 ```
 
 
-#### Install Payload
+### Install Payload
 
 Best method determined by privilege and other environmental factors if no method is specified.
 ```

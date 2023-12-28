@@ -1,6 +1,7 @@
 """
 os_versioning.py: macOS versioning breakdown.
 """
+
 import enum
 
 

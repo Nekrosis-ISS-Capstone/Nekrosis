@@ -1,6 +1,7 @@
 """
 macos.py: macOS-specific persistence logic.
 """
+
 import platform
 
 from support.core import Persistence

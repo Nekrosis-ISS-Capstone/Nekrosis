@@ -1,6 +1,7 @@
 """
 persistence_methods.py: macOS-specific persistence methods.
 """
+
 import enum
 
 

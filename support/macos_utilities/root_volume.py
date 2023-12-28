@@ -1,6 +1,7 @@
 """
 root_volume.py: macOS-specific root volume logic.
 """
+
 import plistlib
 import subprocess
 
