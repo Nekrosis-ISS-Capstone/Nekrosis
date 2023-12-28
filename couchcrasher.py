@@ -1,10 +1,18 @@
 """
 couchcrasher.py: Entry point for the CouchCrasher application.
 
-Usage:
-    couchcrasher.py (-p | --payload) <payload> [--method <method>]
-    couchcrasher.py (-h | --help)
-    couchcrasher.py (-v | --version)
+Standalone usage:
+    >>> couchcrasher.py (-p | --payload) <payload> [--method <method>]
+    >>> couchcrasher.py (-h | --help)
+    >>> couchcrasher.py (-v | --version)
+
+Library usage:
+    >>> from couchcrasher import CouchCrasher
+    >>> couchcrasher = CouchCrasher(payload="/path/to/payload")
+
+    >>> couchcrasher.supported_persistence_methods()
+    >>> couchcrasher.recommended_persistence_method()
+    >>> couchcrasher.run()
 """
 
 import os
@@ -119,16 +127,30 @@ class CouchCrasher:
         self.persistence_obj.install()
 
 
-    def list_supported_persistence_methods(self) -> None:
+    def supported_persistence_methods(self) -> list:
+        """
+        Get a list of supported persistence methods for the current OS.
+        """
+        return self.persistence_obj.supported_persistence_methods()
+
+
+    def recommended_persistence_method(self) -> str:
+        """
+        Get the recommended persistence method for the current OS.
+        """
+        return self.persistence_obj.recommended_method
+
+
+    def _list_supported_persistence_methods(self) -> None:
         """
         Get a list of supported persistence methods for the current OS.
         """
         print(f"Supported persistence methods for {self._friendly_os(self._current_os)}:")
-        for method in self.persistence_obj.supported_persistence_methods():
+        for method in self.supported_persistence_methods():
             print(f'  "{method}"')
 
         print(f"\nRecommended persistence method for {self._friendly_os(self._current_os)}:")
-        print(f'  "{self.persistence_obj.recommended_method}"')
+        print(f'  "{self.recommended_persistence_method()}"')
 
         print(f"\nIf missing methods, re-run with elevated privileges (if applicable).")
 
@@ -171,7 +193,7 @@ if __name__ == "__main__":
     )
 
     if args.list_supported_methods:
-        couchcrasher.list_supported_persistence_methods()
+        couchcrasher._list_supported_persistence_methods()
     else:
         if not args.payload:
             parser.print_help()
