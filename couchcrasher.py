@@ -36,6 +36,12 @@ SUPPORTED_HOSTS: dict = {
     "darwin": MacPersistence,
 }
 
+FRIENDLY_HOSTS:  dict = {
+    "win32":  "Windows",
+    "linux":  "Linux",
+    "darwin": "macOS"
+}
+
 
 class CouchCrasher:
     """
@@ -50,24 +56,15 @@ class CouchCrasher:
         self._current_os = self._get_os()
 
         if self._current_os not in SUPPORTED_HOSTS:
-            raise NotImplementedError(f"OS {self._friendly_os(self._current_os)} ({self._current_os}) is not supported.")
+            raise NotImplementedError(f"OS {self._current_os} is not supported.")
+
+        self._friendly_os_name = FRIENDLY_HOSTS[self._current_os]
 
         self.persistence_obj: Persistence = SUPPORTED_HOSTS[self._current_os](
             payload=self._payload,
             identifier=self._identifier,
             custom_method=self._custom_method
         )
-
-
-    def _friendly_os(self, os: str) -> str:
-        """
-        Get a friendly OS name.
-        """
-        return {
-            "win32":  "Windows",
-            "linux":  "Linux",
-            "darwin": "macOS"
-        }[os]
 
 
     def _verify_payload(self) -> None:
@@ -145,11 +142,11 @@ class CouchCrasher:
         """
         Get a list of supported persistence methods for the current OS.
         """
-        print(f"Supported persistence methods for {self._friendly_os(self._current_os)}:")
+        print(f"Supported persistence methods for {self._friendly_os_name}:")
         for method in self.supported_persistence_methods():
             print(f'  "{method}"')
 
-        print(f"\nRecommended persistence method for {self._friendly_os(self._current_os)}:")
+        print(f"\nRecommended persistence method for {self._friendly_os_name}:")
         print(f'  "{self.recommended_persistence_method()}"')
 
         print(f"\nIf missing methods, re-run with elevated privileges (if applicable).")
