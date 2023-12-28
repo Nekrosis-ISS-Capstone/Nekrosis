@@ -1,0 +1,45 @@
+name: CI - Validate Wheel
+
+on:
+  push:
+  workflow_dispatch:
+  release:
+    types: [published]
+
+jobs:
+  build:
+    name: Validate Wheel
+    runs-on: linux-latest
+    env:
+      branch: ${{ github.ref }}
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set Python 3
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.11
+
+      - name: Set up Python 3 libraries
+        run: pip3 install --requirement requirements.txt
+
+      - name: Set up build tools
+        run: pip3 install setuptools wheel twine build
+
+      - name: Validate setup.py
+        run: python3 setup.py check --metadata --strict
+
+      - name: Test setup.py
+        run: python3 setup.py test
+
+      - name: Build portable executable
+        run: python3 -m build --wheel
+
+      - name: Validate wheel
+        run: twine check dist/*.whl
+
+      - name: Install wheel
+        run: pip3 install dist/*.whl
+
+      - name: Test wheel
+        run: cd /; python3 -c "import couchcrasher; print(couchcrasher.PROJECT_VERSION)"
