@@ -36,10 +36,10 @@ jobs:
         run: python3 -m build --wheel
 
       - name: Validate wheel
-        run: twine check dist/*.whl
+        run: twine check dist/couchcrasher-*.whl
 
       - name: Install wheel
-        run: pip3 install dist/*.whl
+        run: pip3 install dist/couchcrasher-*.whl
 
       - name: Test wheel
-        run: cd /; python3 -c "import couchcrasher; print(couchcrasher.PROJECT_VERSION)"
+        run: python3 -c "import couchcrasher; print(couchcrasher.PROJECT_VERSION)"
