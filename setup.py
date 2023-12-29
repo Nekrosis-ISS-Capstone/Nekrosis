@@ -8,21 +8,31 @@ Usage:
 from setuptools import setup, find_packages
 
 
-def get_version():
+def fetch_property(property: str) -> str:
+    """
+    Fetch a property from the main CouchCrasher class.
+
+    Parameters:
+        property (str): The name of the property to fetch.
+
+    Returns:
+        The value of the property.
+    """
     for line in open("couchcrasher.py", "r").readlines():
-        if not line.startswith("PROJECT_VERSION:"):
+        if not line.startswith(property):
             continue
         return line.split("=")[1].strip().strip('"')
 
 
 setup(
     name="couchcrasher",
-    version=get_version(),
+    version=fetch_property("__version__:"),
     description="Multi-platform persistence tool for user-provided payloads.",
     long_description_content_type="text/markdown",
     long_description=open("README.md", "r").read(),
-    author="Ezra Fast, Mitchell Nicholson, Mykola Grymalyuk, Scott Banister and Ulysses Hill",
+    author=fetch_property("__author__:"),
     author_email="",
+    license="3-clause BSD License",
     url="https://github.com/Couch-Crasher-ISS-Capstone/Couch-Crasher-Code",
     python_requires='>=3.6',
     packages=find_packages(include=['*', 'support', 'support.*']),

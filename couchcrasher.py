@@ -15,6 +15,12 @@ Library usage:
     >>> couchcrasher.run()
 """
 
+__version__:  str = "0.0.1"
+__license__:  str = "3-clause BSD License"
+__author__:   str = "Ezra Fast, Mitchell Nicholson, Mykola Grymalyuk, Scott Banister and Ulysses Hill"
+__all__:     list = ["CouchCrasher"]
+
+
 import os
 import sys
 import argparse
@@ -27,8 +33,6 @@ from support.windows import WindowsPersistence
 from support.linux   import LinuxPersistence
 from support.macos   import MacPersistence
 
-
-PROJECT_VERSION: str  = "0.0.1"
 
 SUPPORTED_HOSTS: dict = {
     "win32":  WindowsPersistence,
@@ -172,7 +176,7 @@ if __name__ == "__main__":
         "-v",
         "--version",
         action="version",
-        version=f"CouchCrasher v{PROJECT_VERSION}",
+        version=f"CouchCrasher v{__version__}",
     )
     parser.add_argument(
         "-l",
