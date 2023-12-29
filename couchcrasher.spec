@@ -5,8 +5,10 @@ PyInstaller Configuration File
 """
 
 import platform
+
 from PyInstaller.building.api import PYZ, EXE
 from PyInstaller.building.build_main import Analysis
+
 
 FILENAME:   str = "couchcrasher"
 RUNNING_OS: str = platform.system()

@@ -90,14 +90,14 @@ class CouchCrasher:
         """
         Get privileges for the current user.
         - Unix: returns the effective user ID.
-        - Windows: returns the Secure Identifier (SID) of the current user.
+        - Windows: returns the Security Identifier (SID) of the current user.
         """
         if hasattr(os, "geteuid"):
             return os.geteuid()
 
         user = os.getlogin()
         results = subprocess.run(
-            ["powershell", "-Command", f"Get-WMIObject win32_useraccount -Filter \"Name='{user}'\" | Select SID"],
+            ["C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe", "-Command", f"Get-WMIObject win32_useraccount -Filter \"Name='{user}'\" | Select SID"],
             capture_output=True,
             text=True
         ).stdout.strip().split("\n")
