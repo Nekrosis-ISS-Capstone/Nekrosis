@@ -16,6 +16,9 @@ class MacPersistenceMethods(enum.Enum):
     LAUNCH_AGENT_LIBRARY:  str = "LaunchAgent - Library"
     LAUNCH_DAEMON_LIBRARY: str = "LaunchDaemon - Library"
 
+    # Requires System Integrity Protection to be lowered.
+    LAUNCH_AGENT_SYSTEM:   str = "LaunchAgent - System"
+    LAUNCH_DAEMON_SYSTEM:  str = "LaunchDaemon - System"
+
     # TODO: Implement following methods:
-    # - Root volume persistence.
     # - Electron-based persistence ('ELECTRON_RUN_AS_NODE')

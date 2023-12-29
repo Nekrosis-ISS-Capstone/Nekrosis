@@ -49,6 +49,9 @@ class MacPersistence(Persistence):
         if self.identifier != 0:
             return MacPersistenceMethods.LAUNCH_AGENT_USER.value
 
+        if py_sip_xnu and py_sip_xnu.SipXnu().sip_object.can_edit_root is True:
+            return MacPersistenceMethods.LAUNCH_DAEMON_SYSTEM.value
+
         return MacPersistenceMethods.LAUNCH_DAEMON_LIBRARY.value
 
 
@@ -60,6 +63,10 @@ class MacPersistence(Persistence):
         if self.identifier != 0:
             methods.remove(MacPersistenceMethods.LAUNCH_DAEMON_LIBRARY.value)
             methods.remove(MacPersistenceMethods.LAUNCH_AGENT_LIBRARY.value)
+
+        if not py_sip_xnu or py_sip_xnu.SipXnu().sip_object.can_edit_root is False:
+            methods.remove(MacPersistenceMethods.LAUNCH_DAEMON_SYSTEM.value)
+            methods.remove(MacPersistenceMethods.LAUNCH_AGENT_SYSTEM.value)
 
         return methods
 
@@ -76,6 +83,13 @@ class MacPersistence(Persistence):
             MacPersistenceMethods.LAUNCH_DAEMON_LIBRARY.value
         ]:
             LaunchService(self.payload).install_generic_launch_service(method)
+            return
+
+        if method in [
+            MacPersistenceMethods.LAUNCH_DAEMON_SYSTEM.value,
+            MacPersistenceMethods.LAUNCH_AGENT_SYSTEM.value
+        ]:
+            LaunchService(self.payload).install_root_launch_service(method)
             return
 
         raise NotImplementedError(f"Method {method} not implemented.")

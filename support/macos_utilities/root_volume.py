@@ -3,21 +3,24 @@ root_volume.py: macOS-specific root volume logic.
 """
 
 import plistlib
+import platform
 import subprocess
+
+from pathlib import Path
 
 from support.macos_utilities.os_versioning import XNUVersions
 
 
 BIN_MOUNT:    str = "/sbin/mount"
+BIN_UMOUNT:   str = "/sbin/umount"
 BIN_BLESS:    str = "/usr/sbin/bless"
 BIN_DISKUTIL: str = "/usr/sbin/diskutil"
 
 
 class RootVolume:
 
-    def __init__(self, xnu_version: XNUVersions) -> None:
-        self.xnu_version = xnu_version
-
+    def __init__(self) -> None:
+        self.xnu_version = int(platform.release().split(".")[0])
         self.root_volume_identifier = self._fetch_root_volume_identifier()
 
 
@@ -77,6 +80,8 @@ class RootVolume:
 
         # Big Sur and newer implemented APFS snapshots for the root volume
         if self.xnu_version >= XNUVersions.BIG_SUR.value:
+            if Path("/System/Volumes/Update/mnt1/System/Library/CoreServices/SystemVersion.plist").exists():
+                return "/System/Volumes/Update/mnt1"
             result = subprocess.run([BIN_MOUNT, "-o", "nobrowse", "-t", "apfs", f"/dev/{self.root_volume_identifier}", "/System/Volumes/Update/mnt1"], capture_output=True, text=True)
             if result.returncode != 0:
                 raise RuntimeError(f"Failed to mount root volume:\n{result.stdout}\n{result.stderr}")
@@ -100,10 +105,12 @@ class RootVolume:
             return
 
         if self.xnu_version >= XNUVersions.BIG_SUR.value:
-            commands = [
-                [BIN_BLESS, "--folder", "/System/Volumes/Update/mnt1/System/Library/CoreServices", "--bootefi", "--create-snapshot"],
-                [BIN_MOUNT, "-ur", "/System/Volumes/Update/mnt1"]
-            ]
+            if platform.machine() == "arm64":
+                commands = [[BIN_BLESS, "--mount", "/System/Volumes/Update/mnt1", "--create-snapshot"]]
+            else:
+                commands = [[BIN_BLESS, "--folder", "/System/Volumes/Update/mnt1/System/Library/CoreServices", "--bootefi", "--create-snapshot"]]
+            commands.append([BIN_UMOUNT, "/System/Volumes/Update/mnt1"])
+
             for command in commands:
                 result = subprocess.run(command, capture_output=True, text=True)
                 if result.returncode != 0:
