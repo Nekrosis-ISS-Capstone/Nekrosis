@@ -22,6 +22,7 @@ def fetch_property(property: str) -> str:
         if not line.startswith(property):
             continue
         return line.split("=")[1].strip().strip('"')
+    raise ValueError(f"Property {property} not found.")
 
 
 setup(
