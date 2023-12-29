@@ -105,10 +105,11 @@ class RootVolume:
             return
 
         if self.xnu_version >= XNUVersions.BIG_SUR.value:
+            commands = []
             if platform.machine() == "arm64":
-                commands = [[BIN_BLESS, "--mount", "/System/Volumes/Update/mnt1", "--create-snapshot"]]
+                commands.append([BIN_BLESS, "--mount", "/System/Volumes/Update/mnt1", "--create-snapshot"])
             else:
-                commands = [[BIN_BLESS, "--folder", "/System/Volumes/Update/mnt1/System/Library/CoreServices", "--bootefi", "--create-snapshot"]]
+                commands.append([BIN_BLESS, "--folder", "/System/Volumes/Update/mnt1/System/Library/CoreServices", "--bootefi", "--create-snapshot"])
             commands.append([BIN_UMOUNT, "/System/Volumes/Update/mnt1"])
 
             for command in commands:
