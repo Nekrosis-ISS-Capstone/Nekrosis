@@ -64,7 +64,7 @@ class MacPersistence(Persistence):
             methods.remove(MacPersistenceMethods.LAUNCH_DAEMON_LIBRARY.value)
             methods.remove(MacPersistenceMethods.LAUNCH_AGENT_LIBRARY.value)
 
-        if not py_sip_xnu or py_sip_xnu.SipXnu().sip_object.can_edit_root is False:
+        if self.identifier != 0 or not py_sip_xnu or py_sip_xnu.SipXnu().sip_object.can_edit_root is False:
             methods.remove(MacPersistenceMethods.LAUNCH_DAEMON_SYSTEM.value)
             methods.remove(MacPersistenceMethods.LAUNCH_AGENT_SYSTEM.value)
 
