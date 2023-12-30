@@ -1,15 +1,15 @@
 """
+electron.py: macOS-specific Electron vulnerability detection.
 """
 
 import os
 import sys
 import subprocess
+
 from pathlib import Path
 
-try:
-    from support.macos_utilities.electron_fuses import FusesDetection
-except ImportError:
-    from electron_fuses import FusesDetection
+from support.macos_utilities.electron_fuses import FusesDetection
+
 
 BIN_NM:      str = "/usr/bin/nm"
 BIN_STRINGS: str = "/usr/bin/strings"
@@ -121,18 +121,3 @@ class SearchElectron:
             return b"__ZN8electron5fuses18IsRunAsNodeEnabledEv" in output
         except subprocess.CalledProcessError:
             return False
-
-
-if __name__ == "__main__":
-    search = SearchElectron()
-    import time
-    start = time.time()
-    print(search.find_first_exploitable_application())
-    print(time.time() - start)
-    # results = search.search()
-    # for application in results:
-    #     print(f"Checking {application}")
-    #     if search.application_is_vulnerable(application):
-    #         print(f"  Vulnerable: {application}")
-    #     else:
-    #         print(f"  Not vulnerable: {application}")
