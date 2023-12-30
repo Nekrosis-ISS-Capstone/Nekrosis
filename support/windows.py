@@ -21,3 +21,5 @@ class WindowsPersistence(Persistence):
         self.custom_method
         self.temp_dir
         self.recommended_method
+
+        super().__post_init__()

