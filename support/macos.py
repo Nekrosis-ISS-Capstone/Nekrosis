@@ -4,10 +4,10 @@ macos.py: macOS-specific persistence logic.
 
 import platform
 
-from support.core import Persistence
-from support.macos_utilities.electron import SearchElectron
-from support.macos_utilities.launch_service import LaunchService
-from support.macos_utilities.persistence_methods import MacPersistenceMethods
+from .core import Persistence
+from .macos_utilities.electron import SearchElectron
+from .macos_utilities.launch_service import LaunchService
+from .macos_utilities.persistence_methods import MacPersistenceMethods
 
 if platform.system() == "Darwin":
     import py_sip_xnu

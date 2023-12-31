@@ -2,7 +2,7 @@
 windows.py: Windows-specific persistence logic.
 """
 
-from support.core import Persistence
+from .core import Persistence
 
 
 class WindowsPersistence(Persistence):

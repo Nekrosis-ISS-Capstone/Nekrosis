@@ -8,7 +8,7 @@ import subprocess
 
 from pathlib import Path
 
-from support.macos_utilities.electron_fuses import FusesDetection
+from .electron_fuses import FusesDetection
 
 
 BIN_NM:      str = "/usr/bin/nm"

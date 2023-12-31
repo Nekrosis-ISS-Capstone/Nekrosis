@@ -10,8 +10,8 @@ import subprocess
 
 from pathlib import Path
 
-from support.macos_utilities.persistence_methods import MacPersistenceMethods
-from support.macos_utilities.root_volume import RootVolume
+from .root_volume import RootVolume
+from .persistence_methods import MacPersistenceMethods
 
 
 BIN_CP:        str = "/bin/cp"

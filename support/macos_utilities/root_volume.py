@@ -8,7 +8,7 @@ import subprocess
 
 from pathlib import Path
 
-from support.macos_utilities.os_versioning import XNUVersions
+from .os_versioning import XNUVersions
 
 
 BIN_MOUNT:    str = "/sbin/mount"

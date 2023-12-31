@@ -2,7 +2,7 @@
 linux.py: Linux-specific persistence logic.
 """
 
-from support.core import Persistence
+from .core import Persistence
 
 
 class LinuxPersistence(Persistence):
