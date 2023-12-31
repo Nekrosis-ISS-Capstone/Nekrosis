@@ -23,6 +23,7 @@ __all__:     list = ["CouchCrasher"]
 
 import os
 import sys
+import logging
 import argparse
 import subprocess
 
@@ -56,6 +57,8 @@ class CouchCrasher:
         self._payload       = payload
         self._custom_method = custom_method
 
+        self._init_logging()
+
         self._identifier = self._get_privileges()
         self._current_os = self._get_os()
 
@@ -68,6 +71,22 @@ class CouchCrasher:
             payload=self._payload,
             identifier=self._identifier,
             custom_method=self._custom_method
+        )
+
+
+    def _init_logging(self, verbose: bool = True) -> None:
+        """
+        Initialize logging.
+        """
+        if logging.getLogger().hasHandlers():
+            return
+
+        logging.basicConfig(
+            level=logging.INFO,
+            format="%(message)s" if verbose is False else "[%(levelname)-8s] [%(filename)-20s]: %(message)s",
+            handlers=[
+                logging.StreamHandler()
+            ]
         )
 
 
@@ -119,11 +138,11 @@ class CouchCrasher:
         """
         self._verify_payload()
 
-        print("Creating persistence")
-        print(f"  Payload: {self._payload}")
-        print(f"  OS: {self._friendly_os_name}")
-        print((f"  Effective User ID:" if self._current_os != "win32" else "  Security Identifier:") + f" {self._identifier}")
-        print(f'  Persistence Method: "{self.persistence_obj.configured_persistence_method()}"')
+        logging.info("Creating persistence")
+        logging.info(f"  Payload: {self._payload}")
+        logging.info(f"  OS: {self._friendly_os_name}")
+        logging.info((f"  Effective User ID:" if self._current_os != "win32" else "  Security Identifier:") + f" {self._identifier}")
+        logging.info(f'  Persistence Method: "{self.persistence_obj.configured_persistence_method()}"')
 
         self.persistence_obj.install()
 
@@ -146,14 +165,16 @@ class CouchCrasher:
         """
         Get a list of supported persistence methods for the current OS.
         """
-        print(f"Supported persistence methods for {self._friendly_os_name}:")
+        logging.info(f"Supported persistence methods for {self._friendly_os_name}:")
         for method in self.supported_persistence_methods():
-            print(f'  "{method}"')
+            logging.info(f'  "{method}"')
 
-        print(f"\nRecommended persistence method for {self._friendly_os_name}:")
-        print(f'  "{self.recommended_persistence_method()}"')
+        logging.info("")
+        logging.info(f"Recommended persistence method for {self._friendly_os_name}:")
+        logging.info(f'  "{self.recommended_persistence_method()}"')
 
-        print(f"\nIf missing methods, re-run with elevated privileges (if applicable).")
+        logging.info("")
+        logging.info("If missing methods, re-run with elevated privileges (if applicable).")
 
 
 if __name__ == "__main__":

@@ -4,6 +4,7 @@ launch_service.py: macOS-specific launchd logic.
 
 import os
 import random
+import logging
 import plistlib
 import subprocess
 
@@ -79,9 +80,9 @@ class LaunchService:
         for command in commands:
             result = subprocess.run(command, capture_output=True, text=True)
             if result.returncode != 0:
-                print(result.stdout)
+                logging.error(result.stdout)
                 if result.stderr:
-                    print(result.stderr)
+                    logging.error(result.stderr)
                 return False
 
         return True
@@ -101,9 +102,9 @@ class LaunchService:
         for command in commands:
             result = subprocess.run(command, capture_output=True, text=True)
             if result.returncode != 0:
-                print(result.stdout)
+                logging.error(result.stdout)
                 if result.stderr:
-                    print(result.stderr)
+                    logging.error(result.stderr)
                 return False
 
         return True
@@ -120,7 +121,7 @@ class LaunchService:
         ]:
             raise ValueError(f"Unsupported variant {variant}")
 
-        print(f"Installing launch service ({variant})")
+        logging.info(f"Installing launch service ({variant})")
 
         service_directory = Path()
         if variant == MacPersistenceMethods.LAUNCH_AGENT_USER.value:
@@ -143,15 +144,15 @@ class LaunchService:
         payload_file = service_directory / payload_new_name
         subprocess.run([BIN_CP, self.payload, str(payload_file)], capture_output=True, text=True)
 
-        print(f"  Relocated payload: {payload_file}")
-        print(f"  Service file: {service_file_path}")
+        logging.info(f"  Relocated payload: {payload_file}")
+        logging.info(f"  Service file: {service_file_path}")
 
         plistlib.dump(self._build_launch_service(name=service_name, arguments=[str(payload_file)]), service_file_path.open("wb"))
 
         if not self._start_launch_service(str(service_file_path)):
             raise RuntimeError("Failed to start launch service.")
 
-        print("  Service started successfully 🎉")
+        logging.info("  Service started successfully 🎉")
 
 
     def install_root_launch_service(self, variant: str, randomize_name: bool = True) -> None:
@@ -164,7 +165,7 @@ class LaunchService:
         ]:
             raise ValueError(f"Unsupported variant {variant}")
 
-        print(f"Installing launch service ({variant})")
+        logging.info(f"Installing launch service ({variant})")
 
         root_obj = RootVolume()
         mount_path = root_obj.mount()
@@ -190,18 +191,18 @@ class LaunchService:
         if mount_path != "/":
             payload_file = Path(str(payload_file).replace(str(mount_path), ""))
 
-        print(f"  Relocated payload: {payload_file}")
-        print(f"  Service file: {service_file_path}")
+        logging.info(f"  Relocated payload: {payload_file}")
+        logging.info(f"  Service file: {service_file_path}")
 
         plistlib.dump(self._build_launch_service(name=service_name, arguments=[str(payload_file)]), service_file_path.open("wb"))
 
         if mount_path != "/":
             # Can't start service if root volume is sealed.
-            print("  Service will start on next boot")
+            logging.info("  Service will start on next boot")
         else:
             if not self._start_launch_service(str(service_file_path)):
                 raise RuntimeError("Failed to start launch service.")
-            print("  Service started successfully 🎉")
+            logging.info("  Service started successfully 🎉")
 
         root_obj.unmount()
 
@@ -213,8 +214,8 @@ class LaunchService:
         if variant != MacPersistenceMethods.LAUNCH_AGENT_ELECTRON.value:
             raise ValueError(f"Unsupported variant {variant}")
 
-        print(f"Installing launch service ({variant})")
-        print(f"  Electron binary: {electron_binary}")
+        logging.info(f"Installing launch service ({variant})")
+        logging.info(f"  Electron binary: {electron_binary}")
 
         service_directory = Path("~/Library/LaunchAgents").expanduser()
         service_directory.mkdir(parents=True, exist_ok=True)
@@ -230,8 +231,8 @@ class LaunchService:
         payload_file = service_directory / payload_new_name
         subprocess.run([BIN_CP, self.payload, str(payload_file)], capture_output=True, text=True)
 
-        print(f"  Relocated payload: {payload_file}")
-        print(f"  Service file: {service_file_path}")
+        logging.info(f"  Relocated payload: {payload_file}")
+        logging.info(f"  Service file: {service_file_path}")
 
         arguments = [
             str(electron_binary),
@@ -244,4 +245,4 @@ class LaunchService:
         if not self._start_launch_service(str(service_file_path)):
             raise RuntimeError("Failed to start launch service.")
 
-        print("  Service started successfully 🎉")
+        logging.info("  Service started successfully 🎉")

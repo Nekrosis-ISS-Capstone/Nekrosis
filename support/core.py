@@ -2,6 +2,7 @@
 core.py: Class Structure for OS persistence logic.
 """
 
+import logging
 import tempfile
 
 
@@ -60,4 +61,4 @@ class Persistence:
         """
         Install the payload.
         """
-        print(f"install() not implemented in current class ({self.__class__.__name__})")
+        logging.critical(f"install() not implemented in current class ({self.__class__.__name__})")
