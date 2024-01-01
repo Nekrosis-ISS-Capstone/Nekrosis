@@ -68,13 +68,11 @@ class LaunchService:
         """
         Start Launch Agent
         """
-        current_user_id = self._current_user_id()
 
         commands = [
             [BIN_CHMOD, "644", service_path],
-            [BIN_CHOWN, current_user_id, service_path],
-            [BIN_LAUNCHCTL, "asuser", current_user_id, BIN_LAUNCHCTL, "load", "-w", service_path],
-            [BIN_LAUNCHCTL, "asuser", current_user_id, BIN_LAUNCHCTL, "start", Path(service_path).stem]
+            [BIN_LAUNCHCTL, "load", "-w", service_path],
+            [BIN_LAUNCHCTL, "start", Path(service_path).stem]
         ]
 
         for command in commands:
