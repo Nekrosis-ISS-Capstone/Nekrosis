@@ -17,6 +17,9 @@ BIN_STRINGS: str = "/usr/bin/strings"
 if hasattr(sys, "_MEIPASS"):
     BIN_NM      = os.path.join(sys._MEIPASS, "support/macos_binaries/nm")
     BIN_STRINGS = os.path.join(sys._MEIPASS, "support/macos_binaries/strings")
+elif "site-packages" in __file__:
+    BIN_NM      = os.path.join(os.path.dirname(os.path.dirname(__file__)), "macos_binaries/nm")
+    BIN_STRINGS = os.path.join(os.path.dirname(os.path.dirname(__file__)), "macos_binaries/strings")
 
 
 class SearchElectron:

@@ -1,0 +1,2 @@
+include support/macos_binaries/nm
+include support/macos_binaries/strings
