@@ -12,7 +12,7 @@ Library usage:
 
     >>> couchcrasher.supported_persistence_methods()
     >>> couchcrasher.recommended_persistence_method()
-    >>> couchcrasher.run()
+    >>> couchcrasher.install()
 """
 
 __version__:  str = "0.0.1"
@@ -53,7 +53,7 @@ class CouchCrasher:
     Main class for the CouchCrasher application.
 
     Public methods:
-        - run()
+        - install()
         - change_payload()
         - change_custom_method()
         - supported_persistence_methods()
@@ -163,7 +163,7 @@ class CouchCrasher:
         logging.info("If missing methods, re-run with elevated privileges (if applicable).")
 
 
-    def run(self) -> None:
+    def install(self) -> None:
         """
         Install the payload.
         """
@@ -258,4 +258,4 @@ if __name__ == "__main__":
         if not args.payload:
             parser.print_help()
             exit(1)
-        couchcrasher.run()
+        couchcrasher.install()

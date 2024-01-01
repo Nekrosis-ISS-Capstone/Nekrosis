@@ -30,7 +30,7 @@ couchcrasher = CouchCrasher("/path/to/malware")
 
 couchcrasher.supported_persistence_methods()
 couchcrasher.recommended_persistence_method()
-couchcrasher.run()
+couchcrasher.install()
 ```
 
 
