@@ -1,71 +1,40 @@
 # Couch-Crasher-Code
 
-Repository for the Couch Crasher application. Information Systems Security Capstone Project for Winter 2024.
+A multi-platform persistence toolkit, with the goal of simplifying malware deployment.
 
-Authors:
-* [Ezra Fast](https://github.com/EzraFast1)
-* [Mitchell Nicholson](https://github.com/1Kalagen1)
-* [Mykola Grymalyuk](https://github.com/khronokernel)
-* [Scott Banister](https://github.com/pleasantriess)
-* [Ulysses Hill](https://github.com/Ulysses-Hill)
+Developed as a capstone project for the Southern Alberta Institute of Technology's Information Systems Security program (Winter 2024), to demonstrate the many techniques that can be used to achieve persistence on Windows, macOS, and Linux.
 
-
-## Project Goals
-
-* Multi-platform persistence toolkit.
-   * Windows
-   * Linux
-   * macOS
-* Written in Python 3.
-* Supports providing payload for persistence.
-* Determines best persistence method based on OS and current user privileges.
-* Develop malware sample to test persistence toolkit.
-
-
-## Project Architecture
-
-- `couchcrasher.py`: Entry point for the Couch Crasher application.
-  - Handle command line arguments.
-  - Detect correct library to use (OS-specific).
-  - Detect user privileges, pass to library.
-  - Validate payload.
-  - Call library to perform persistence.
-- `core.py`: Parent class for OS-specific persistence classes.
-  - Defines structures such as required methods for child classes.
-  - Public functions (child classes must implement):
-    - `supported_persistence_methods()`: Returns a list of supported persistence methods.
-    - `configured_persistence_method()`: Returns the persistence method currently in use.
-    - `install()`: Installs payload for persistence.
-- `windows.py`: Windows-specific persistence class.
-  - Inherits from `core.py`.
-  - User privileges are determined by SID (Security Identifier).
-- `linux.py`: Linux-specific persistence class.
-  - Inherits from `core.py`.
-  - User privileges are determined by EUID (Effective User Identifier).
-- `macos.py`: macOS-specific persistence class.
-  - Inherits from `core.py`.
-  - User privileges are determined by EUID (Effective User Identifier).
+Please use irresponsibly.
 
 
 ## Setup
 
-Requires Python 3.6+, please install from official website: [python.org](https://www.python.org/downloads/).
+Requires Python 3.6 or newer, install from official website when applicable: [python.org](https://www.python.org/downloads/).
 
+Additional dependencies can be installed with pip:
 ```sh
-# Base dependencies
-pip install -r requirements.txt
-
-# If creating standalone executable, install pyinstaller
-pip install pyinstaller
-
-# If creating wheel, install build
-pip install build
+python -m pip install -r requirements.txt
 ```
 
 
 ## Usage
 
-### Help
+Project designed to be used either as a library or as a standalone executable.
+
+### Library
+
+```python
+from couchcrasher import CouchCrasher
+
+couchcrasher = CouchCrasher("/path/to/malware")
+
+couchcrasher.supported_persistence_methods()
+couchcrasher.recommended_persistence_method()
+couchcrasher.run()
+```
+
+
+### Executable - Help
 ```
 $ couchcrasher.py (-h | --help)
 
@@ -84,35 +53,7 @@ $ couchcrasher.py (-h | --help)
 >>>                         List the supported persistence methods for the current OS.
 ```
 
-
-### Version
-
-```
-$ couchcrasher.py (-v | --version)
-
->>> CouchCrasher v0.0.1
-```
-
-
-### List Supported Methods
-
-Dependant on OS and privileges of current user.
-```
-$ couchcrasher.py (-l | --list-supported-methods)
-
->>> Supported persistence methods for macOS:
->>>   "LaunchAgent - Current User"
->>>   "LaunchAgent - Library"
->>>   "LaunchDaemon - Library"
->>>
->>> Recommended persistence method for macOS:
->>>   "LaunchDaemon - Library"
->>>
->>> If missing methods, re-run with elevated privileges (if applicable).
-```
-
-
-### Install Payload
+### Executable - Install Payload
 
 Best method determined by privilege and other environmental factors if no method is specified.
 ```
@@ -128,3 +69,11 @@ $ couchcrasher.py (-p | --payload) <malware> (-m | --method) <method>
 >>>   Service file: /Users/target/Library/LaunchAgents/com.80309.plist
 >>>   Service started successfully 🎉
 ```
+
+## Authors
+
+* [Ezra Fast](https://github.com/EzraFast1)
+* [Mitchell Nicholson](https://github.com/1Kalagen1)
+* [Mykola Grymalyuk](https://github.com/khronokernel)
+* [Scott Banister](https://github.com/pleasantriess)
+* [Ulysses Hill](https://github.com/Ulysses-Hill)

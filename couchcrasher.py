@@ -89,7 +89,7 @@ class CouchCrasher:
         )
 
 
-    def _init_logging(self, verbose: bool = True) -> None:
+    def _init_logging(self, verbose: bool = False) -> None:
         """
         Initialize logging.
         """
