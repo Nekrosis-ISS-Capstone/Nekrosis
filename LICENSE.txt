@@ -1,8 +1,8 @@
-Copyright (c) 2023, Ezra Fast
-Copyright (c) 2023, Mitchell Nicholson
-Copyright (c) 2023, Mykola Grymalyuk
-Copyright (c) 2023, Scott Banister
-Copyright (c) 2023, Ulysses Hill
+Copyright (c) 2023-2024, Ezra Fast
+Copyright (c) 2023-2024, Mitchell Nicholson
+Copyright (c) 2023-2024, Mykola Grymalyuk
+Copyright (c) 2023-2024, Scott Banister
+Copyright (c) 2023-2024, Ulysses Hill
 
 All rights reserved.
 
