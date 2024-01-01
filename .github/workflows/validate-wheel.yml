@@ -42,4 +42,4 @@ jobs:
         run: pip3 install dist/couchcrasher-*.whl
 
       - name: Test wheel
-        run: python3 -c "import couchcrasher; print(couchcrasher.__version__)"
+        run: cd /; python3 -c "import couchcrasher; print(couchcrasher.__version__)"

@@ -42,5 +42,6 @@ setup(
         'support': ['*'],
         'support.*': ['*'],
     },
+    py_modules=["couchcrasher"],
     include_package_data=True,
 )
