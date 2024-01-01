@@ -51,6 +51,13 @@ FRIENDLY_HOSTS:  dict = {
 class CouchCrasher:
     """
     Main class for the CouchCrasher application.
+
+    Public methods:
+        - run()
+        - change_payload()
+        - change_custom_method()
+        - supported_persistence_methods()
+        - recommended_persistence_method()
     """
 
     def __init__(self, payload: str, custom_method: str = None) -> None:
@@ -59,6 +66,8 @@ class CouchCrasher:
 
         self._init_logging()
 
+        self.persistence_obj: Persistence = None
+
         self._identifier = self._get_privileges()
         self._current_os = self._get_os()
 
@@ -66,7 +75,13 @@ class CouchCrasher:
             raise NotImplementedError(f"OS {self._current_os} is not supported.")
 
         self._friendly_os_name = FRIENDLY_HOSTS[self._current_os]
+        self._init_persistence()
 
+
+    def _init_persistence(self) -> None:
+        """
+        Create the persistence object.
+        """
         self.persistence_obj: Persistence = SUPPORTED_HOSTS[self._current_os](
             payload=self._payload,
             identifier=self._identifier,
@@ -132,6 +147,22 @@ class CouchCrasher:
         return results[2]
 
 
+    def _list_supported_persistence_methods(self) -> None:
+        """
+        Get a list of supported persistence methods for the current OS.
+        """
+        logging.info(f"Supported persistence methods for {self._friendly_os_name}:")
+        for method in self.supported_persistence_methods():
+            logging.info(f'  "{method}"')
+
+        logging.info("")
+        logging.info(f"Recommended persistence method for {self._friendly_os_name}:")
+        logging.info(f'  "{self.recommended_persistence_method()}"')
+
+        logging.info("")
+        logging.info("If missing methods, re-run with elevated privileges (if applicable).")
+
+
     def run(self) -> None:
         """
         Install the payload.
@@ -147,6 +178,29 @@ class CouchCrasher:
         self.persistence_obj.install()
 
 
+    def change_payload(self, payload: str) -> None:
+        """
+        Change the payload.
+        """
+        self._payload = payload
+        self.persistence_obj.payload = payload
+
+
+    def change_custom_method(self, custom_method: str) -> None:
+        """
+        Change the custom persistence method.
+        """
+        self._custom_method = custom_method
+        self.persistence_obj.custom_method = custom_method
+
+
+    def reload(self) -> None:
+        """
+        Save changes to the persistence object.
+        """
+        self._init_persistence()
+
+
     def supported_persistence_methods(self) -> list:
         """
         Get a list of supported persistence methods for the current OS.
@@ -159,22 +213,6 @@ class CouchCrasher:
         Get the recommended persistence method for the current OS.
         """
         return self.persistence_obj.recommended_method
-
-
-    def _list_supported_persistence_methods(self) -> None:
-        """
-        Get a list of supported persistence methods for the current OS.
-        """
-        logging.info(f"Supported persistence methods for {self._friendly_os_name}:")
-        for method in self.supported_persistence_methods():
-            logging.info(f'  "{method}"')
-
-        logging.info("")
-        logging.info(f"Recommended persistence method for {self._friendly_os_name}:")
-        logging.info(f'  "{self.recommended_persistence_method()}"')
-
-        logging.info("")
-        logging.info("If missing methods, re-run with elevated privileges (if applicable).")
 
 
 if __name__ == "__main__":
