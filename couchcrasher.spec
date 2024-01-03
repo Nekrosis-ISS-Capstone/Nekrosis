@@ -45,6 +45,6 @@ exe = EXE(pyz,
     upx_exclude=[],
     runtime_tmpdir=None,
     target_arch="universal2",
-    icon="resources/icons/AppIcon.png" if RUNNING_OS != "Darwin" else "resources/icons/AppIcon.icns",
+    icon=f"resources/icons/AppIcon.{'ico' if RUNNING_OS == 'Windows' else 'icns'}",
     entitlements_file="resources/signing/entitlements.plist",
     console=True)
