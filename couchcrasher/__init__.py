@@ -20,4 +20,4 @@ __license__:  str = "3-clause BSD License"
 __author__:   str = "Ezra Fast, Mitchell Nicholson, Mykola Grymalyuk, Scott Banister and Ulysses Hill"
 __all__:     list = ["CouchCrasher"]
 
-from .core import CouchCrasher
+from .core import CouchCrasher, main

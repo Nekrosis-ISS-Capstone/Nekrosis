@@ -8,6 +8,8 @@ import subprocess
 
 from pathlib import Path
 
+from couchcrasher import __version__
+
 from .support.base    import Persistence
 from .support.windows import WindowsPersistence
 from .support.linux   import LinuxPersistence
@@ -194,7 +196,7 @@ class CouchCrasher:
         return self.persistence_obj.recommended_method
 
 
-if __name__ == "__main__":
+def main():
     parser = argparse.ArgumentParser(
         description="Install a payload for persistence on Windows, macOS, or Linux.",
         formatter_class=argparse.RawDescriptionHelpFormatter
@@ -238,3 +240,7 @@ if __name__ == "__main__":
             parser.print_help()
             exit(1)
         couchcrasher.install()
+
+
+if __name__ == "__main__":
+    main()

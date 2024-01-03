@@ -17,10 +17,10 @@ if RUNNING_OS == "Windows":
     FILENAME += ".exe"
 
 
-a = Analysis(['couchcrasher.py'],
+a = Analysis(["couchcrasher_entry.py"],
     pathex=[],
     binaries=[],
-    datas=[("support", '.')],
+    datas=[("couchcrasher", ".")],
     hiddenimports=[],
     hookspath=[],
     runtime_hooks=[],
