@@ -40,3 +40,13 @@ jobs:
         with:
           name: couchcrasher.exe (Windows)
           path: dist/couchcrasher.exe
+
+      - name: Upload executable (release)
+        if: github.event_name == 'release'
+        uses: svenstaro/upload-release-action@v2
+        with:
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          file: dist/couchcrasher.exe
+          asset_name: couchcrasher (Windows)
+          tag: ${{ github.ref }}
+          file_glob: true

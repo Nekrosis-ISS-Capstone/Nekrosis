@@ -49,3 +49,13 @@ jobs:
         with:
           name: couchcrasher.whl
           path: dist/couchcrasher-*.whl
+
+      - name: Upload executable (release)
+        if: github.event_name == 'release'
+        uses: svenstaro/upload-release-action@v2
+        with:
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          file: dist/*couchcrasher.whl
+          asset_name: couchcrasher.whl (wheel)
+          tag: ${{ github.ref }}
+          file_glob: true
