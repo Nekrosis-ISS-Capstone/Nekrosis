@@ -12,6 +12,9 @@ jobs:
     runs-on: ubuntu-latest
     env:
       branch: ${{ github.ref }}
+
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
     steps:
       - uses: actions/checkout@v3
 
