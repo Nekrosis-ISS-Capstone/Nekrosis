@@ -1,4 +1,9 @@
+"""
+core.py: Main class for the CouchCrasher application.
 
+Implemented as either a library through the CouchCrasher class,
+or as a standalone application through the main() function.
+"""
 
 import os
 import sys
@@ -197,6 +202,10 @@ class CouchCrasher:
 
 
 def main():
+    """
+    Entry point for standalone application.
+    """
+
     parser = argparse.ArgumentParser(
         description="Install a payload for persistence on Windows, macOS, or Linux.",
         formatter_class=argparse.RawDescriptionHelpFormatter

@@ -36,7 +36,7 @@ couchcrasher.install()
 
 ### Executable - Help
 ```
-$ couchcrasher.py (-h | --help)
+$ couchcrasher (-h | --help)
 
 >>> usage: couchcrasher [-h] [-p PAYLOAD] [-m METHOD] [-v] [-l]
 >>>
@@ -57,7 +57,7 @@ $ couchcrasher.py (-h | --help)
 
 Best method determined by privilege and other environmental factors if no method is specified.
 ```
-$ couchcrasher.py (-p | --payload) <malware> (-m | --method) <method>
+$ couchcrasher (-p | --payload) <malware> (-m | --method) <method>
 
 >>> Creating persistence
 >>>   Payload: <malware>

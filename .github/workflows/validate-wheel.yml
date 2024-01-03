@@ -43,3 +43,9 @@ jobs:
 
       - name: Test wheel
         run: cd /; python3 -c "import couchcrasher; print(couchcrasher.__version__)"
+
+      - name: Upload wheel (artifact)
+        uses: actions/upload-artifact@v2
+        with:
+          name: couchcrasher.whl
+          path: dist/couchcrasher-*.whl

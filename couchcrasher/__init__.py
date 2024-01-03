@@ -1,10 +1,5 @@
 """
-couchcrasher.py: Entry point for the CouchCrasher application.
-
-Standalone usage:
-    >>> couchcrasher.py (-p | --payload) <payload> [--method <method>]
-    >>> couchcrasher.py (-h | --help)
-    >>> couchcrasher.py (-v | --version)
+__init__.py: Entry point for the CouchCrasher library.
 
 Library usage:
     >>> from couchcrasher import CouchCrasher

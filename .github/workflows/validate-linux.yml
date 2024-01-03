@@ -33,4 +33,10 @@ jobs:
         run: dist/couchcrasher --list-supported-methods
 
       - name: Validate (Install Payload)
-        run: dist/couchcrasher --payload couchcrasher.py
+        run: dist/couchcrasher --payload couchcrasher_entry.py
+
+      - name: Upload executable (artifact)
+        uses: actions/upload-artifact@v2
+        with:
+          name: couchcrasher (Linux)
+          path: dist/couchcrasher
