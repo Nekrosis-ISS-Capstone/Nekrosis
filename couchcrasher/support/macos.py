@@ -4,7 +4,7 @@ macos.py: macOS-specific persistence logic.
 
 import platform
 
-from .core import Persistence
+from .base import Persistence
 from .macos_utilities.electron import SearchElectron
 from .macos_utilities.launch_service import LaunchService
 from .macos_utilities.persistence_methods import MacPersistenceMethods

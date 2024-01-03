@@ -1,15 +1,15 @@
 """
-linux.py: Linux-specific persistence logic.
+windows.py: Windows-specific persistence logic.
 """
 
-from .core import Persistence
+from .base import Persistence
 
 
-class LinuxPersistence(Persistence):
+class WindowsPersistence(Persistence):
     """
-    Linux-specific persistence logic.
+    Windows-specific persistence logic.
 
-    identifier: Effective user ID of the user to install the payload as.
+    identifier: Security Identifier (SID) of the user to install the payload as.
     """
 
     def __init__(self, payload: str, identifier: int, custom_method: str = None) -> None:

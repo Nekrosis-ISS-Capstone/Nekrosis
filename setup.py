@@ -18,7 +18,7 @@ def fetch_property(property: str) -> str:
     Returns:
         The value of the property.
     """
-    for line in open("couchcrasher.py", "r").readlines():
+    for line in open("couchcrasher/__init__.py", "r").readlines():
         if not line.startswith(property):
             continue
         return line.split("=")[1].strip().strip('"')
@@ -36,11 +36,11 @@ setup(
     license="3-clause BSD License",
     url="https://github.com/Couch-Crasher-ISS-Capstone/Couch-Crasher-Code",
     python_requires='>=3.6',
-    packages=find_packages(include=['*', 'support', 'support.*']),
+    packages=find_packages(include=['couchcrasher', 'couchcrasher.support', 'couchcrasher.support.*']),
     package_data={
-        '': ['couchcrasher.py'],
-        'support': ['*'],
-        'support.*': ['*'],
+        'couchcrasher': ['*'],
+        'couchcrasher.support': ['*'],
+        'couchcrasher.support.*': ['*'],
     },
     py_modules=["couchcrasher"],
     include_package_data=True,
