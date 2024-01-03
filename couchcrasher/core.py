@@ -247,7 +247,7 @@ def main():
     else:
         if not args.payload:
             parser.print_help()
-            exit(1)
+            sys.exit(1)
         couchcrasher.install()
 
 
