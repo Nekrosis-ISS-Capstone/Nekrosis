@@ -1,4 +1,33 @@
-# Project Architecture
+# Nekrosis Contributing Guide
+
+* [Design](#design)
+* [Building](#building)
+* [Structure](#structure)
+
+
+## Design
+
+Project is design such that it can be used as follows:
+- Library: Importable into larger projects (ex. Nekrosis-GUI).
+- Executable: Standalone executable for use in scripts or on the command line.
+
+As such, avoid interactions with users post-invocation (ex. `input()`). If additional information must be gathered, use command line arguments or a configuration file.
+
+Additionally, the project must be usable with simply a single payload and no other input. There must be default values for all required parameters, and logic for best method determination must be implemented.
+
+
+## Building
+
+While not required for development, the following commands can be used to build the project:
+- Library: `python -m build --wheel`
+  - Resulting wheel file can be found in `dist/`.
+- Executable: `python -m pyinstaller nekrosis.spec`
+  - Resulting executable can be found in `dist/`.
+
+If there are any issues with building, please reference our CI/CD configuration: [.github/workflows/](.github/workflows/).
+
+
+## Structure
 
 - `nekrosis/core.py`: Entry point for the Nekrosis application.
   - Handle command line arguments.
