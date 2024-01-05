@@ -23,3 +23,18 @@ class LinuxPersistence(Persistence):
         self.recommended_method
 
         super().__post_init__()
+
+
+    def _determine_recommended_persistence_method(self) -> str:
+        # TODO: Remove this line when the method is implemented.
+        return super()._determine_recommended_persistence_method()
+
+
+    def supported_persistence_methods(self) -> list:
+        # TODO: Remove this line when the method is implemented.
+        return super().supported_persistence_methods()
+
+
+    def install(self) -> None:
+        # TODO: Remove this line when the method is implemented.
+        super().install()
