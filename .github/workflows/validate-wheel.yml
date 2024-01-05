@@ -39,26 +39,26 @@ jobs:
         run: python3 -m build --wheel
 
       - name: Validate wheel
-        run: twine check dist/couchcrasher-*.whl
+        run: twine check dist/nekrosis-*.whl
 
       - name: Install wheel
-        run: pip3 install dist/couchcrasher-*.whl
+        run: pip3 install dist/nekrosis-*.whl
 
       - name: Test wheel
-        run: cd /; python3 -c "import couchcrasher; print(couchcrasher.__version__)"
+        run: cd /; python3 -c "import nekrosis; print(nekrosis.__version__)"
 
       - name: Upload wheel (artifact)
         uses: actions/upload-artifact@v2
         with:
-          name: couchcrasher.whl
-          path: dist/couchcrasher-*.whl
+          name: nekrosis.whl
+          path: dist/nekrosis-*.whl
 
       - name: Upload executable (release)
         if: github.event_name == 'release'
         uses: svenstaro/upload-release-action@v2
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
-          file: dist/*couchcrasher.whl
-          asset_name: couchcrasher.whl (wheel)
+          file: dist/*nekrosis.whl
+          asset_name: nekrosis.whl (wheel)
           tag: ${{ github.ref }}
           file_glob: true

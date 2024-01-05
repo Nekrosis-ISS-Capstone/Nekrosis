@@ -1,2 +1,2 @@
-include couchcrasher/support/macos_binaries/nm
-include couchcrasher/support/macos_binaries/strings
+include nekrosis/support/macos_binaries/nm
+include nekrosis/support/macos_binaries/strings

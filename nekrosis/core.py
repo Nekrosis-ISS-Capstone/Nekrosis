@@ -1,7 +1,7 @@
 """
-core.py: Main class for the CouchCrasher application.
+core.py: Main class for the Nekrosis application.
 
-Implemented as either a library through the CouchCrasher class,
+Implemented as either a library through the Nekrosis class,
 or as a standalone application through the main() function.
 """
 
@@ -13,7 +13,7 @@ import subprocess
 
 from pathlib import Path
 
-from couchcrasher import __version__
+from nekrosis import __version__
 
 from .support.base    import Persistence
 from .support.windows import WindowsPersistence
@@ -34,9 +34,9 @@ FRIENDLY_HOSTS:  dict = {
 }
 
 
-class CouchCrasher:
+class Nekrosis:
     """
-    Main class for the CouchCrasher application.
+    Main class for the Nekrosis application.
 
     Public methods:
         - install()
@@ -225,7 +225,7 @@ def main():
         "-v",
         "--version",
         action="version",
-        version=f"CouchCrasher v{__version__}",
+        version=f"Nekrosis v{__version__}",
     )
     parser.add_argument(
         "-l",
@@ -237,18 +237,18 @@ def main():
 
     args = parser.parse_args()
 
-    couchcrasher = CouchCrasher(
+    nekrosis = Nekrosis(
         payload=args.payload,
         custom_method=args.method
     )
 
     if args.list_supported_methods:
-        couchcrasher._list_supported_persistence_methods()
+        nekrosis._list_supported_persistence_methods()
     else:
         if not args.payload:
             parser.print_help()
             sys.exit(1)
-        couchcrasher.install()
+        nekrosis.install()
 
 
 if __name__ == "__main__":

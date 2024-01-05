@@ -10,17 +10,17 @@ from PyInstaller.building.api import PYZ, EXE
 from PyInstaller.building.build_main import Analysis
 
 
-FILENAME:   str = "couchcrasher"
+FILENAME:   str = "nekrosis"
 RUNNING_OS: str = platform.system()
 
 if RUNNING_OS == "Windows":
     FILENAME += ".exe"
 
 
-a = Analysis(["couchcrasher_entry.py"],
+a = Analysis(["nekrosis_entry.py"],
     pathex=[],
     binaries=[],
-    datas=[("couchcrasher", ".")],
+    datas=[("nekrosis", ".")],
     hiddenimports=[],
     hookspath=[],
     runtime_hooks=[],

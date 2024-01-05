@@ -1,5 +1,5 @@
 """
-setup.py: Setup script for CouchCrasher application.
+setup.py: Setup script for Nekrosis application.
 
 Usage:
     python3 -m build --wheel
@@ -10,7 +10,7 @@ from setuptools import setup, find_packages
 
 def fetch_property(property: str) -> str:
     """
-    Fetch a property from the main CouchCrasher class.
+    Fetch a property from the main Nekrosis class.
 
     Parameters:
         property (str): The name of the property to fetch.
@@ -18,7 +18,7 @@ def fetch_property(property: str) -> str:
     Returns:
         The value of the property.
     """
-    for line in open("couchcrasher/__init__.py", "r").readlines():
+    for line in open("nekrosis/__init__.py", "r").readlines():
         if not line.startswith(property):
             continue
         return line.split("=")[1].strip().strip('"')
@@ -26,7 +26,7 @@ def fetch_property(property: str) -> str:
 
 
 setup(
-    name="couchcrasher",
+    name="nekrosis",
     version=fetch_property("__version__:"),
     description="Multi-platform persistence tool for user-provided payloads.",
     long_description_content_type="text/markdown",
@@ -36,13 +36,13 @@ setup(
     license="3-clause BSD License",
     url="https://github.com/Couch-Crasher-ISS-Capstone/Couch-Crasher-Code",
     python_requires='>=3.6',
-    packages=find_packages(include=['couchcrasher', 'couchcrasher.support', 'couchcrasher.support.*']),
+    packages=find_packages(include=['nekrosis', 'nekrosis.support', 'nekrosis.support.*']),
     package_data={
-        'couchcrasher': ['*'],
-        'couchcrasher.support': ['*'],
-        'couchcrasher.support.*': ['*'],
+        'nekrosis': ['*'],
+        'nekrosis.support': ['*'],
+        'nekrosis.support.*': ['*'],
     },
-    py_modules=["couchcrasher"],
+    py_modules=["nekrosis"],
     include_package_data=True,
     install_requires=open("requirements.txt", "r").readlines(),
 )

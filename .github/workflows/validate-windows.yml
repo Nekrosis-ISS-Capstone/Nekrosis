@@ -30,26 +30,26 @@ jobs:
         run: pip3 install pyinstaller
 
       - name: Build portable executable
-        run: pyinstaller couchcrasher.spec
+        run: pyinstaller nekrosis.spec
 
       - name: Validate (List supported persistence methods)
-        run: dist/couchcrasher.exe --list-supported-methods
+        run: dist/nekrosis.exe --list-supported-methods
 
       - name: Validate (Install Payload)
-        run: dist/couchcrasher.exe --payload couchcrasher_entry.py
+        run: dist/nekrosis.exe --payload nekrosis_entry.py
 
       - name: Upload executable (artifact)
         uses: actions/upload-artifact@v2
         with:
-          name: couchcrasher.exe (Windows)
-          path: dist/couchcrasher.exe
+          name: nekrosis.exe (Windows)
+          path: dist/nekrosis.exe
 
       - name: Upload executable (release)
         if: github.event_name == 'release'
         uses: svenstaro/upload-release-action@v2
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
-          file: dist/couchcrasher.exe
-          asset_name: couchcrasher (Windows)
+          file: dist/nekrosis.exe
+          asset_name: nekrosis (Windows)
           tag: ${{ github.ref }}
           file_glob: true

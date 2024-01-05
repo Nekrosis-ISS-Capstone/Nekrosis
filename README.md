@@ -24,21 +24,21 @@ Project designed to be used either as a library or as a standalone executable.
 ### Library
 
 ```python
-from couchcrasher import CouchCrasher
+from nekrosis import Nekrosis
 
-couchcrasher = CouchCrasher("/path/to/malware")
+nekrosis = Nekrosis("/path/to/malware")
 
-couchcrasher.supported_persistence_methods()
-couchcrasher.recommended_persistence_method()
-couchcrasher.install()
+nekrosis.supported_persistence_methods()
+nekrosis.recommended_persistence_method()
+nekrosis.install()
 ```
 
 
 ### Executable - Help
 ```
-$ couchcrasher (-h | --help)
+$ nekrosis (-h | --help)
 
->>> usage: couchcrasher [-h] [-p PAYLOAD] [-m METHOD] [-v] [-l]
+>>> usage: nekrosis [-h] [-p PAYLOAD] [-m METHOD] [-v] [-l]
 >>>
 >>> Install a payload for persistence on Windows, macOS, or Linux.
 >>>
@@ -57,7 +57,7 @@ $ couchcrasher (-h | --help)
 
 Best method determined by privilege and other environmental factors if no method is specified.
 ```
-$ couchcrasher (-p | --payload) <malware> (-m | --method) <method>
+$ nekrosis (-p | --payload) <malware> (-m | --method) <method>
 
 >>> Creating persistence
 >>>   Payload: <malware>
