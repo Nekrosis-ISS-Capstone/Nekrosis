@@ -7,7 +7,7 @@
 
 ## Design
 
-Project is design such that it can be used as follows:
+Project is designed such that it can be used as follows:
 - Library: Importable into larger projects (ex. Nekrosis-GUI).
 - Executable: Standalone executable for use in scripts or on the command line.
 
