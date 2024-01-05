@@ -208,7 +208,8 @@ def main():
 
     parser = argparse.ArgumentParser(
         description="Install a payload for persistence on Windows, macOS, or Linux.",
-        formatter_class=argparse.RawDescriptionHelpFormatter
+        formatter_class=argparse.RawDescriptionHelpFormatter,
+        prog="nekrosis"
     )
     parser.add_argument(
         "-p",

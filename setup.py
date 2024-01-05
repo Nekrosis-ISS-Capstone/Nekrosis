@@ -42,6 +42,11 @@ setup(
         'nekrosis.support': ['*'],
         'nekrosis.support.*': ['*'],
     },
+    entry_points={
+        'console_scripts': [
+            'nekrosis = nekrosis.core:main',
+        ],
+    },
     py_modules=["nekrosis"],
     include_package_data=True,
     install_requires=open("requirements.txt", "r").readlines(),
