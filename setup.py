@@ -28,7 +28,7 @@ def fetch_property(property: str) -> str:
 setup(
     name="nekrosis",
     version=fetch_property("__version__:"),
-    description="Multi-platform persistence tool for user-provided payloads.",
+    description="Multi-platform persistence toolkit for user-provided payloads.",
     long_description_content_type="text/markdown",
     long_description=open("README.md", "r").read(),
     author=fetch_property("__author__:"),
