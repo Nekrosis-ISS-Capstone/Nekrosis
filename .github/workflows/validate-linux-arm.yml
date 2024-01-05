@@ -36,7 +36,7 @@ jobs:
       - name: Upload executable (artifact)
         uses: actions/upload-artifact@v2
         with:
-          name: nekrosis (Linux)
+          name: nekrosis (Linux ARM64)
           path: dist/nekrosis
 
       - name: Upload executable (release)
@@ -45,6 +45,6 @@ jobs:
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
           file: dist/nekrosis
-          asset_name: nekrosis (Linux)
+          asset_name: nekrosis (Linux ARM64)
           tag: ${{ github.ref }}
           file_glob: true
