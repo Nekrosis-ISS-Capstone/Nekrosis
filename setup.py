@@ -35,16 +35,16 @@ setup(
     author_email="",
     license="3-clause BSD License",
     url="https://github.com/Nekrosis-ISS-Capstone/Nekrosis",
-    python_requires='>=3.6',
-    packages=find_packages(include=['nekrosis', 'nekrosis.support', 'nekrosis.support.*']),
+    python_requires=">=3.6",
+    packages=find_packages(include=["nekrosis", "nekrosis.support", "nekrosis.support.*"]),
     package_data={
-        'nekrosis': ['*'],
-        'nekrosis.support': ['*'],
-        'nekrosis.support.*': ['*'],
+        "nekrosis": ["*"],
+        "nekrosis.support": ["*"],
+        "nekrosis.support.*": ["*"],
     },
     entry_points={
-        'console_scripts': [
-            'nekrosis = nekrosis.core:main',
+        "console_scripts": [
+            "nekrosis = nekrosis.core:main",
         ],
     },
     py_modules=["nekrosis"],
