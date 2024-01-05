@@ -13,7 +13,7 @@ import subprocess
 
 from pathlib import Path
 
-from nekrosis import __version__
+from . import __version__
 
 from .support.base    import Persistence
 from .support.windows import WindowsPersistence
