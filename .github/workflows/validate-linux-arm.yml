@@ -9,7 +9,7 @@ on:
 jobs:
   build:
     name: Validate Linux (ARM)
-    runs-on: ripeda-ubuntu-arm64
+    runs-on: [self-hosted, Linux, ARM64]
     env:
       branch: ${{ github.ref }}
 
