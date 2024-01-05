@@ -9,7 +9,7 @@ on:
 jobs:
   build:
     name: Validate Linux (ARM)
-    runs-on: ["self-hosted", "ARM64", "linux"]
+    runs-on: ["self-hosted", "ARM64", "Linux"]
     env:
       branch: ${{ github.ref }}
 
