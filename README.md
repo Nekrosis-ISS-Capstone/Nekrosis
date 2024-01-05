@@ -9,6 +9,7 @@ Developed as a capstone project for the Southern Alberta Institute of Technology
 
 Please use irresponsibly.
 
+Note: This project is still in development, and is not yet ready for use.
 
 ## Setup
 
