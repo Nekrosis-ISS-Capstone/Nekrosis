@@ -1,4 +1,7 @@
-# Nekrosis
+<div align="center">
+             <img src="resources/icons/AppIcon.png" alt="App Icon" width="256" />
+             <h1>Nekrosis</h1>
+</div>
 
 A multi-platform persistence toolkit, with the goal of simplifying malware deployment.
 
