@@ -34,7 +34,7 @@ setup(
     author=fetch_property("__author__:"),
     author_email="",
     license="3-clause BSD License",
-    url="https://github.com/Couch-Crasher-ISS-Capstone/Couch-Crasher-Code",
+    url="https://github.com/Nekrosis-ISS-Capstone/Nekrosis",
     python_requires='>=3.6',
     packages=find_packages(include=['nekrosis', 'nekrosis.support', 'nekrosis.support.*']),
     package_data={

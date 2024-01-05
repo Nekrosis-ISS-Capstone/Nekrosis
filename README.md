@@ -1,4 +1,4 @@
-# Couch-Crasher-Code
+# Nekrosis
 
 A multi-platform persistence toolkit, with the goal of simplifying malware deployment.
 
