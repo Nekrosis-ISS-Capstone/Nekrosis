@@ -39,12 +39,16 @@ jobs:
           name: nekrosis.exe (Windows ARM64)
           path: dist/nekrosis.exe
 
+      - name: Compress executable (release)
+        if: github.event_name == 'release'
+        run: C:\Program Files\7-Zip\7z.exe a -tzip dist/nekrosis-windows-arm64.zip dist/nekrosis.exe
+
       - name: Upload executable (release)
         if: github.event_name == 'release'
         uses: svenstaro/upload-release-action@v2
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
-          file: dist/nekrosis.exe
+          file: dist/nekrosis-windows-arm64.zip
           asset_name: nekrosis (Windows ARM64)
           tag: ${{ github.ref }}
           file_glob: true
