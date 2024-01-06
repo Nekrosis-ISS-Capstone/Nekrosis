@@ -58,7 +58,7 @@ jobs:
         uses: svenstaro/upload-release-action@v2
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
-          file: dist/*nekrosis.whl
+          file: dist/nekrosis-*.whl
           asset_name: nekrosis.whl (wheel)
           tag: ${{ github.ref }}
           file_glob: true
