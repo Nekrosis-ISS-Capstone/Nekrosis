@@ -158,7 +158,7 @@ class Nekrosis:
         logging.info("Creating persistence")
         logging.info(f"  Payload: {self._payload}")
         logging.info(f"  OS: {self._friendly_os_name}")
-        logging.info((f"  Effective User ID:" if self._current_os != "win32" else "  Security Identifier:") + f" {self._identifier}")
+        logging.info(("  Effective User ID:" if self._current_os != "win32" else "  Security Identifier:") + f" {self._identifier}")
         logging.info(f'  Persistence Method: "{self.persistence_obj.configured_persistence_method()}"')
 
         self.persistence_obj.install()

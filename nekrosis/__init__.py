@@ -10,7 +10,7 @@ Library usage:
     >>> nekrosis.install()
 """
 
-__version__:  str = "0.0.1"
+__version__:  str = "0.0.2"
 __license__:  str = "3-clause BSD License"
 __author__:   str = "Ezra Fast, Mitchell Nicholson, Mykola Grymalyuk, Scott Banister and Ulysses Hill"
 __all__:     list = ["Nekrosis"]
