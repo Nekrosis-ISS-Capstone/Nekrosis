@@ -1,4 +1,4 @@
-name: CI - Validate Windows (ARM)
+name: CI - Validate Windows (ARM64)
 
 on:
   push:
@@ -8,7 +8,7 @@ on:
 
 jobs:
   build:
-    name: Validate Windows (ARM)
+    name: Validate Windows (ARM64)
     runs-on: [self-hosted, Windows, ARM64]
     env:
       branch: ${{ github.ref }}

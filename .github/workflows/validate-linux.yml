@@ -1,4 +1,4 @@
-name: CI - Validate Linux
+name: CI - Validate Linux (x86_64)
 
 on:
   push:
@@ -8,7 +8,7 @@ on:
 
 jobs:
   build:
-    name: Validate Linux
+    name: Validate Linux (x86_64)
     runs-on: ubuntu-latest
     env:
       branch: ${{ github.ref }}
@@ -41,7 +41,7 @@ jobs:
       - name: Upload executable (artifact)
         uses: actions/upload-artifact@v2
         with:
-          name: nekrosis (Linux)
+          name: nekrosis (Linux x86_64)
           path: dist/nekrosis
 
       - name: Upload executable (release)
@@ -50,6 +50,6 @@ jobs:
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
           file: dist/nekrosis
-          asset_name: nekrosis (Linux)
+          asset_name: nekrosis (Linux x86_64)
           tag: ${{ github.ref }}
           file_glob: true
