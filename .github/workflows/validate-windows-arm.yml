@@ -8,7 +8,7 @@ on:
 
 jobs:
   build:
-    name: Validate Windows
+    name: Validate Windows (ARM)
     runs-on: [self-hosted, Windows, ARM64]
     env:
       branch: ${{ github.ref }}
