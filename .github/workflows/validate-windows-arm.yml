@@ -41,7 +41,7 @@ jobs:
 
       - name: Compress executable (release)
         if: github.event_name == 'release'
-        run: C:\Program Files\7-Zip\7z.exe a -tzip dist/nekrosis-windows-arm64.zip dist/nekrosis.exe
+        run: '"C:\Program Files\7-Zip\7z.exe" a -tzip dist/nekrosis-windows-arm64.zip dist/nekrosis.exe'
 
       - name: Upload executable (release)
         if: github.event_name == 'release'
