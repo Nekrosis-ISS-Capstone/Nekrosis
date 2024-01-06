@@ -33,7 +33,7 @@ setup(
     long_description=open("README.md", "r").read(),
     author=fetch_property("__author__:"),
     author_email="",
-    license="3-clause BSD License",
+    license=fetch_property("__license__:"),
     url="https://github.com/Nekrosis-ISS-Capstone/Nekrosis",
     python_requires=">=3.6",
     packages=find_packages(include=["nekrosis", "nekrosis.support", "nekrosis.support.*"]),
