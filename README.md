@@ -77,7 +77,7 @@ $ nekrosis (-p | --payload) <malware> (-m | --method) <method>
 
 ## Authors
 
-* [Ezra Fast](https://github.com/EzraFast1)
+* [Ezra Fast](https://github.com/ezra-fast)
 * [Mitchell Nicholson](https://github.com/1Kalagen1)
 * [Mykola Grymalyuk](https://github.com/khronokernel)
 * [Scott Banister](https://github.com/pleasantriess)
