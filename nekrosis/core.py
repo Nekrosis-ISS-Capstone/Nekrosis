@@ -9,7 +9,7 @@ import os
 import sys
 import logging
 import argparse
-import subprocess
+import ctypes
 
 from pathlib import Path
 
@@ -106,7 +106,7 @@ class Nekrosis:
         return sys.platform
 
 
-    def _get_privileges(self) -> int | str:
+    def _get_privileges(self) -> int | bool:
         """
         Get privileges for the current user.
         - Unix: returns the effective user ID.
@@ -114,23 +114,8 @@ class Nekrosis:
         """
         if hasattr(os, "geteuid"):
             return os.geteuid()
-
-        user = os.getlogin()
-        results = subprocess.run(
-            ["C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe", "-Command", f"Get-WMIObject win32_useraccount -Filter \"Name='{user}'\" | Select SID"],
-            capture_output=True,
-            text=True
-        ).stdout.strip().split("\n")
-
-        if len(results) < 3:
-            raise ValueError(f"Unexpected output from powershell:\n{results}")
-
-        # Security Identifiers must start with "S-"
-        # https://learn.microsoft.com/en-us/windows-server/identity/ad-ds/manage/understand-security-identifiers
-        if not results[2].startswith("S-"):
-            raise ValueError(f"Unexpected output from powershell:\n{results}")
-
-        return results[2]
+        else:
+            return ctypes.windll.shell32.IsUserAnAdmin()
 
 
     def _list_supported_persistence_methods(self) -> None:

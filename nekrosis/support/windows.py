@@ -3,6 +3,7 @@ windows.py: Windows-specific persistence logic.
 """
 
 from .base import Persistence
+from .windows_utilities.persistence_methods import WindowsPersistenceMethods
 
 
 class WindowsPersistence(Persistence):
@@ -31,8 +32,12 @@ class WindowsPersistence(Persistence):
 
 
     def supported_persistence_methods(self) -> list:
-        # TODO: Remove this line when the method is implemented.
-        return super().supported_persistence_methods()
+        methods = [method.value for method in WindowsPersistenceMethods]
+
+        if self.identifier == 0:
+            methods.remove(WindowsPersistenceMethods.REGEDIT_RUN.value)
+
+        return methods
 
 
     def install(self) -> None:
