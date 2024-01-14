@@ -43,7 +43,7 @@ If there are any issues with building, please reference our CI/CD configuration:
     - `install()`: Installs payload for persistence.
 - `nekrosis/support/windows.py`: Windows-specific persistence class.
   - Inherits from `base.py`.
-  - User privileges are determined by SID (Security Identifier).
+  - User privileges are determined by administrator status (UAC).
 - `nekrosis/support/linux.py`: Linux-specific persistence class.
   - Inherits from `base.py`.
   - User privileges are determined by EUID (Effective User Identifier).

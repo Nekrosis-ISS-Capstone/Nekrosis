@@ -12,11 +12,11 @@ class Persistence:
 
     Parameters:
         payload:            The payload to install.
-        identifier:         The effective user ID on Unix, or Security Identifier (SID) on Windows.
+        identifier:         The effective user ID on Unix, or administrator status (UAC) on Windows.
         custom_method:      The custom persistence method to use.
     """
 
-    def __init__(self, payload: str, identifier: int | str, custom_method: str = None) -> None:
+    def __init__(self, payload: str, identifier: int, custom_method: str = None) -> None:
         self.payload = payload
         self.identifier = identifier
         self.custom_method = custom_method

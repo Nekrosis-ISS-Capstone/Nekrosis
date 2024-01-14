@@ -106,16 +106,16 @@ class Nekrosis:
         return sys.platform
 
 
-    def _get_privileges(self) -> int | bool:
+    def _get_privileges(self) -> int:
         """
         Get privileges for the current user.
         - Unix: returns the effective user ID.
-        - Windows: returns the Security Identifier (SID) of the current user.
+        - Windows: returns the administrator status (UAC).
         """
         if hasattr(os, "geteuid"):
             return os.geteuid()
-        else:
-            return ctypes.windll.shell32.IsUserAnAdmin()
+
+        return ctypes.windll.shell32.IsUserAnAdmin()
 
 
     def _list_supported_persistence_methods(self) -> None:
@@ -143,7 +143,7 @@ class Nekrosis:
         logging.info("Creating persistence")
         logging.info(f"  Payload: {self._payload}")
         logging.info(f"  OS: {self._friendly_os_name}")
-        logging.info(("  Effective User ID:" if self._current_os != "win32" else "  Security Identifier:") + f" {self._identifier}")
+        logging.info(("  Effective User ID:" if self._current_os != "win32" else "  Administrator:") + f" {self._identifier}")
         logging.info(f'  Persistence Method: "{self.persistence_obj.configured_persistence_method()}"')
 
         self.persistence_obj.install()
