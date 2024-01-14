@@ -7,9 +7,9 @@ or as a standalone application through the main() function.
 
 import os
 import sys
+import ctypes
 import logging
 import argparse
-import ctypes
 
 from pathlib import Path
 
