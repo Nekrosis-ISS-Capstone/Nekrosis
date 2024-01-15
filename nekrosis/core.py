@@ -143,7 +143,7 @@ class Nekrosis:
         logging.info("Creating persistence")
         logging.info(f"  Payload: {self._payload}")
         logging.info(f"  OS: {self._friendly_os_name}")
-        logging.info(("  Effective User ID:" if self._current_os != "win32" else "  Administrator:") + f" {self._identifier}")
+        logging.info(f"  {self.current_privilege_level_str()}")
         logging.info(f'  Persistence Method: "{self.persistence_obj.configured_persistence_method()}"')
 
         self.persistence_obj.install()
@@ -184,6 +184,16 @@ class Nekrosis:
         Get the recommended persistence method for the current OS.
         """
         return self.persistence_obj.recommended_method
+
+
+    def current_privilege_level_str(self) -> str:
+        """
+        Get the current privilege level as a string.
+        """
+        if self._current_os != "win32":
+            return "Effective User ID: " + str(self._identifier)
+
+        return "Administrator: " + str(bool(self._identifier))
 
 
 def main():
