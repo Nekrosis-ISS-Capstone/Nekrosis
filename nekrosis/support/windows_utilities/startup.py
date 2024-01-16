@@ -26,7 +26,7 @@ class StartupFolder:
         """
         Get the global startup folder.
         """
-        return Path(f"C:\\ProgramData\\Microsoft\\Windows\\Start Menu\\Programs\\Startup")
+        return Path("C:\\ProgramData\\Microsoft\\Windows\\Start Menu\\Programs\\Startup")
 
 
     def _user_startup_folder(self) -> Path:
