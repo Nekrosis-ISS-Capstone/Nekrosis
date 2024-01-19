@@ -5,8 +5,11 @@ except ImportError:
     print("Module 'win32com' is not installed. Please install 'pywin32'.")
 
 def modify_edge_shortcuts():
+    current_user = os.getlogin()
+    #print(current_user)
     # New path to the Microsoft Edge shortcut
-    edge_shortcut_path = r"C:\Users\UlyssesHill\AppData\Roaming\Microsoft\Internet Explorer\Quick Launch\Microsoft Edge.lnk" #TODO: change the filepath to be dynamically linked to use the usernames
+    edge_shortcut_path = r"C:\Users\{}\AppData\Roaming\Microsoft\Internet Explorer\Quick Launch\Microsoft Edge.lnk".format(current_user)
+
 
     # Modify the specified Edge shortcut
     modify_shortcut(edge_shortcut_path)
