@@ -1,2 +1,2 @@
 py_sip_xnu>=1.0.4; sys_platform == "darwin"
-pypiwin32>=306; sys_platform == "win32com.client"
+pypiwin32>=306; sys_platform == "win32"
