@@ -1,5 +1,8 @@
 import os
-import win32com.client
+try:
+    import win32com.client
+except ImportError:
+    print("Module 'win32com' is not installed. Please install 'pywin32'.")
 
 def modify_edge_shortcuts():
     # New path to the Microsoft Edge shortcut
