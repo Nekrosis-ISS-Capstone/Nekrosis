@@ -1,6 +1,5 @@
 #The plan is to overwrite the exectuable path on windows edge that will startup on launch
 import os
-import win32com.client
 def get_edge_shortcut_path():
     #gets the username for the following filepath
     username = os.getlogin()
