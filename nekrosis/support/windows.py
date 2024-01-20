@@ -1,17 +1,12 @@
 """
 windows.py: Windows-specific persistence logic.
 """
-import platform
 
 from .base import Persistence
 from .windows_utilities.startup import StartupFolder
 from .windows_utilities.persistence_methods import WindowsPersistenceMethods
 
 
-if platform.system() == "Windows":
-    import win32com.client
-else:
-    win32com.client = None
 
 class WindowsPersistence(Persistence):
     """
