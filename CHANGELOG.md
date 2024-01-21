@@ -5,7 +5,8 @@
 - Windows: Add `Startup` folder-based persistence method.
   - `Startup Folder (Current User)` (default)
   - `Startup Folder (All Users)` (requires admin)
-
+- Rename Application Entry Point to `nekrosis.py` (from `nekrosis_entry.py`).
+  - Does not affect library usage.
 
 ## 0.0.1
 - Initial release.
