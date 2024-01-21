@@ -1,8 +1,11 @@
 import os
-try:
+import sys
+
+if sys.platform == "win32":
     import win32com.client
-except ImportError:
-    print("Module 'win32com' is not installed. Please install 'pywin32'.")
+else:
+    win32com = None
+
 
 def modify_edge_shortcuts():
     current_user = os.getlogin()

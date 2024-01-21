@@ -7,7 +7,6 @@ from .windows_utilities.startup import StartupFolder
 from .windows_utilities.persistence_methods import WindowsPersistenceMethods
 
 
-
 class WindowsPersistence(Persistence):
     """
     Windows-specific persistence logic.
