@@ -44,6 +44,8 @@ class Nekrosis:
         - change_custom_method()
         - supported_persistence_methods()
         - recommended_persistence_method()
+        - current_privilege_level_str()
+        - is_admin()
     """
 
     def __init__(self, payload: str, custom_method: str = None) -> None:
@@ -194,6 +196,13 @@ class Nekrosis:
             return "Effective User ID: " + str(self._identifier)
 
         return "Administrator: " + str(bool(self._identifier))
+
+
+    def is_admin(self) -> bool:
+        """
+        Check if the current user has administrator privileges.
+        """
+        return self._identifier == (0 if self._current_os != "win32" else 1)
 
 
 def main():
