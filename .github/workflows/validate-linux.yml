@@ -36,7 +36,7 @@ jobs:
         run: dist/nekrosis --list-supported-methods
 
       - name: Validate (Install Payload)
-        run: dist/nekrosis --payload nekrosis_entry.py
+        run: dist/nekrosis --payload nekrosis.py
 
       - name: Upload executable (artifact)
         uses: actions/upload-artifact@v2
