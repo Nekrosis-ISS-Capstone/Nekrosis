@@ -17,7 +17,7 @@ if RUNNING_OS == "Windows":
     FILENAME += ".exe"
 
 
-a = Analysis(["nekrosis_entry.py"],
+a = Analysis(["nekrosis.py"],
     pathex=[],
     binaries=[],
     datas=[("nekrosis", ".")],
