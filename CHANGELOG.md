@@ -7,6 +7,10 @@
   - `Startup Folder (All Users)` (requires admin)
 - Rename Application Entry Point to `nekrosis.py` (from `nekrosis_entry.py`).
   - Does not affect library usage.
+- Add support for exporting supported persistence methods to standardized formats.
+  - `JSON`
+  - `XML`
+  - `PLIST`
 
 ## 0.0.1
 - Initial release.

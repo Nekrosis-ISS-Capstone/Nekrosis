@@ -18,22 +18,27 @@ class ExportPersistenceTypes(enum.Enum):
 class ExportPersistenceMethods:
     """
     Export the persistence methods to structured data (XML, JSON, or plist).
+
+    Parameters:
+    - persistence_methods: A list of persistence methods.
+    - recommended_method: The recommended persistence method.
+    - export_method: The export method (XML, JSON, or plist).
     """
-    def __init__(self, persistence_methods: list, recommended_method: str, method: ExportPersistenceTypes = ExportPersistenceTypes.PLIST) -> None:
+    def __init__(self, persistence_methods: list, recommended_method: str, export_method: ExportPersistenceTypes = ExportPersistenceTypes.PLIST) -> None:
         self.persistence_methods = persistence_methods
         self.recommended_method = recommended_method
-        self.method = method
+        self.export_method = export_method
 
 
     def export(self) -> str:
-        if self.method == ExportPersistenceTypes.XML:
+        if self.export_method == ExportPersistenceTypes.XML:
             return self._export_xml()
-        elif self.method == ExportPersistenceTypes.JSON:
+        elif self.export_method == ExportPersistenceTypes.JSON:
             return self._export_json()
-        elif self.method == ExportPersistenceTypes.PLIST:
+        elif self.export_method == ExportPersistenceTypes.PLIST:
             return self._export_plist()
 
-        raise ValueError(f"Unsupported export method: {self.method}")
+        raise ValueError(f"Unsupported export method: {self.export_method}")
 
 
     def _export_xml(self) -> str:

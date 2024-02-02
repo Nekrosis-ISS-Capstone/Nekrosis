@@ -214,7 +214,7 @@ class Nekrosis:
         return ExportPersistenceMethods(
             persistence_methods=self.supported_persistence_methods(),
             recommended_method=self.recommended_persistence_method(),
-            method=method
+            export_method=method
         ).export()
 
 
