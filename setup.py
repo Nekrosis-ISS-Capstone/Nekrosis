@@ -32,7 +32,7 @@ setup(
     long_description_content_type="text/markdown",
     long_description=open("README.md", "r").read(),
     author=fetch_property("__author__:"),
-    author_email="",
+    author_email=fetch_property("__author_email__:"),
     license=fetch_property("__license__:"),
     url="https://github.com/Nekrosis-ISS-Capstone/Nekrosis",
     python_requires=">=3.6",

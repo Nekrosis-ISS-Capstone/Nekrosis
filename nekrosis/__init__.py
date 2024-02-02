@@ -10,9 +10,10 @@ Library usage:
     >>> nekrosis.install()
 """
 
-__version__:  str = "0.0.2"
-__license__:  str = "3-clause BSD License"
-__author__:   str = "Ezra Fast, Mitchell Nicholson, Mykola Grymalyuk, Scott Banister and Ulysses Hill"
-__all__:     list = ["Nekrosis"]
+__version__:      str = "0.0.2"
+__license__:      str = "3-clause BSD License"
+__author__:       str = "Ezra Fast, Mitchell Nicholson, Mykola Grymalyuk, Scott Banister and Ulysses Hill"
+__author_email__: str = "nekrosis-capstone@protonmail.com"
+__all__:         list = ["Nekrosis"]
 
 from .core import Nekrosis, main
