@@ -20,6 +20,8 @@ from .support.windows import WindowsPersistence
 from .support.linux   import LinuxPersistence
 from .support.macos   import MacPersistence
 
+from .support.export  import ExportPersistenceTypes, ExportPersistenceMethods
+
 
 SUPPORTED_HOSTS: dict = {
     "win32":  WindowsPersistence,
@@ -205,6 +207,17 @@ class Nekrosis:
         return self._identifier == (0 if self._current_os != "win32" else 1)
 
 
+    def export_persistence_methods(self, method: ExportPersistenceTypes = ExportPersistenceTypes.PLIST) -> str:
+        """
+        Export the supported persistence methods to structured data (XML, JSON, or plist).
+        """
+        return ExportPersistenceMethods(
+            persistence_methods=self.supported_persistence_methods(),
+            recommended_method=self.recommended_persistence_method(),
+            method=method
+        ).export()
+
+
 def main():
     """
     Entry point for standalone application.
@@ -238,6 +251,12 @@ def main():
         action="store_true",
         help="List the supported persistence methods for the current OS."
     )
+    parser.add_argument(
+        "-e",
+        "--export",
+        choices=[(format.value) for format in ExportPersistenceTypes],
+        help="Export the supported persistence methods to STDOUT in the specified format."
+    )
 
 
     args = parser.parse_args()
@@ -247,8 +266,11 @@ def main():
         custom_method=args.method
     )
 
-    if args.list_supported_methods:
-        nekrosis._list_supported_persistence_methods()
+    if args.list_supported_methods or args.export:
+        if args.export:
+            print(nekrosis.export_persistence_methods(ExportPersistenceTypes(args.export)), end="")
+        else:
+            nekrosis._list_supported_persistence_methods()
     else:
         if not args.payload:
             parser.print_help()

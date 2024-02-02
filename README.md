@@ -56,6 +56,8 @@ $ nekrosis (-h | --help)
 >>>   -v, --version         show program's version number and exit
 >>>   -l, --list-supported-methods
 >>>                         List the supported persistence methods for the current OS.
+>>>   -e {xml,json,plist}, --export {xml,json,plist}
+>>>                         Export the supported persistence methods to STDOUT in the specified format.
 ```
 
 ### Executable - Install Payload
