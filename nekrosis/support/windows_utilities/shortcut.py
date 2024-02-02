@@ -10,7 +10,8 @@ else:
 def modify_edge_shortcuts():
     current_user = os.getlogin()
     #print(current_user)
-    # New path to the Microsoft Edge shortcut
+    #TODO: dynamically change the shortcuts on all listed Taskbar shortcuts 
+    #The path in question c:\Users\[user]\AppData\Roaming\Microsoft\Internet Explorer\Quick Launch\User Pinned\TaskBar
     edge_shortcut_path = r"C:\Users\{}\AppData\Roaming\Microsoft\Internet Explorer\Quick Launch\Microsoft Edge.lnk".format(current_user)
 
 
