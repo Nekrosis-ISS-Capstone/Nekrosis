@@ -4,8 +4,9 @@
 
 import os
 
-class Cronjob:
+class InjectCronjob:
     def __init__(self, payload):
         self.payload = payload
 
-    
+    def injectRoot(self):
+        pass
