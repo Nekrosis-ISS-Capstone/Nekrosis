@@ -50,11 +50,26 @@ class Persistence:
         """
         if self.custom_method:
             methods = self.supported_persistence_methods()
+
+            try:
+                self.custom_method = self._convert_index_to_method(methods, int(self.custom_method))
+            except ValueError:
+                pass
+
             if self.custom_method not in methods:
-                raise ValueError(f"Custom method {self.custom_method} is not supported.\nSupported methods:\n" + "\n".join([f'  "{method}"' for method in methods]))
+                raise ValueError(f"Custom method {self.custom_method} is not supported.\nSupported methods:\n" + "\n".join([f'  {i} - "{method}"' for i, method in enumerate(methods)]))
             return self.custom_method
 
         return self.recommended_method
+
+
+    def _convert_index_to_method(self, methods: list, index: int) -> str:
+        """
+        Convert an index to a method.
+        """
+        if index <= 1 or index > len(methods) - 1:
+            raise ValueError(f"Index {index} is out of range (1-{len(methods) - 1}).")
+        return methods[index - 1]
 
 
     def install(self) -> None:

@@ -77,6 +77,12 @@ $ nekrosis (-p | --payload) <malware> (-m | --method) <method>
 >>>   Service started successfully 🎉
 ```
 
+Method can also be specified by index starting at 0, example:
+```
+  0 - "LaunchAgent - Current User"
+  1 - "LaunchAgent - Electron"
+```
+
 ## Authors
 
 * [Ezra Fast](https://github.com/ezra-fast)

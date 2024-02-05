@@ -127,12 +127,15 @@ class Nekrosis:
         Get a list of supported persistence methods for the current OS.
         """
         logging.info(f"Supported persistence methods for {self._friendly_os_name}:")
-        for method in self.supported_persistence_methods():
-            logging.info(f'  "{method}"')
+        recommended_index = -1
+        for i, method in enumerate(self.supported_persistence_methods()):
+            logging.info(f'  {i} - "{method}"')
+            if method == self.recommended_persistence_method():
+                recommended_index = i
 
         logging.info("")
         logging.info(f"Recommended persistence method for {self._friendly_os_name}:")
-        logging.info(f'  "{self.recommended_persistence_method()}"')
+        logging.info(f'  {recommended_index} - "{self.recommended_persistence_method()}"')
 
         logging.info("")
         logging.info("If missing methods, re-run with elevated privileges (if applicable).")
