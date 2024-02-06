@@ -119,7 +119,7 @@ class Nekrosis:
         if hasattr(os, "geteuid"):
             return os.geteuid()
 
-        return ctypes.windll.shell32.IsUserAnAdmin()
+        return ctypes.windll.shell32.IsUserAnAdmin() #This will return 1 if root
 
 
     def _list_supported_persistence_methods(self) -> None:

