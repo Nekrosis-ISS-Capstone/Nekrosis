@@ -10,6 +10,7 @@ import sys
 import ctypes
 import logging
 import argparse
+import requests
 
 from pathlib import Path
 
@@ -22,8 +23,7 @@ from .support.macos   import MacPersistence
 
 from .support.export  import ExportPersistenceTypes, ExportPersistenceMethods
 
-if sys.platform == "win32":
-    import requests
+
 
 SUPPORTED_HOSTS: dict = {
     "win32":  WindowsPersistence,
