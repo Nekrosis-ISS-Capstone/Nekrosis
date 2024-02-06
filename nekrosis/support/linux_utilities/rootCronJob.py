@@ -4,4 +4,8 @@
 
 import os
 
+class Cronjob:
+    def __init__(self, payload):
+        self.payload = payload
 
+    
