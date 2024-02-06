@@ -1,4 +1,8 @@
-import winreg
+import sys
+if sys.platform == "win32":
+    import winreg
+else:
+    winreg = None
 import shutil
 import os
 
