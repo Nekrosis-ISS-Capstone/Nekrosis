@@ -38,8 +38,6 @@ class LinuxPersistence(Persistence):
         
         methods = [method.value for method in LinuxPersistenceMethods]
         
-        # return super().supported_persistence_methods()
-
         return methods
 
 
@@ -51,4 +49,3 @@ class LinuxPersistence(Persistence):
             return
 
         # raise NotImplementedError(f"Method {method} not implemented.")
-        # super().install()
