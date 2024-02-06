@@ -26,16 +26,16 @@ class RUNKEY:
     
     def _copy_and_rename(self, source_path, destination_path, new_filename):
         try:
-            os.makedirs(destination_path, exist_ok=True) # Make sure dst folder exists
+            os.makedirs(destination_path, exist_ok=True) # Make sure dst folder exists!
 
-            # copy and rename file (--nuke / -n option will clear traces)
+            # Copy and rename file (--nuke / -n option will clear traces)
             new_file_path = os.path.join(destination_path, new_filename)
             shutil.copy(source_path, new_file_path)
 
-            return new_file_path  # Return the full path of the new file
+            return new_file_path
         except Exception as e:
             print(f"Error: {e}")
-            return None  # Return None in case of an error
+            return None
 
 
     def install(self):
