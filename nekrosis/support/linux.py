@@ -48,4 +48,4 @@ class LinuxPersistence(Persistence):
             InjectCronjob(self.payload).injectRoot()
             return
 
-        # raise NotImplementedError(f"Method {method} not implemented.")
+        # raise NotImplementedError(f"Method {method} not implemented.") 
