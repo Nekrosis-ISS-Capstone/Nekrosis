@@ -25,6 +25,32 @@ def fetch_property(property: str) -> str:
     raise ValueError(f"Property {property} not found.")
 
 
+def status_to_classifier(status: str) -> str:
+    """
+    Convert a status to a classifier.
+
+    Parameters:
+        status (str): The status to convert.
+
+    Returns:
+        The classifier.
+    """
+    statuses = [
+        "Planning",
+        "Pre-Alpha",
+        "Alpha",
+        "Beta",
+        "Production/Stable",
+        "Mature",
+        "Inactive",
+    ]
+
+    if status not in statuses:
+        raise ValueError(f"Status {status} not found.")
+
+    return f"Development Status :: {statuses.index(status) + 1} - {status}"
+
+
 setup(
     name="nekrosis",
     version=fetch_property("__version__:"),
@@ -32,7 +58,7 @@ setup(
     long_description_content_type="text/markdown",
     long_description=open("README.md", "r").read(),
     author=fetch_property("__author__:"),
-    author_email="",
+    author_email=fetch_property("__author_email__:"),
     license=fetch_property("__license__:"),
     url="https://github.com/Nekrosis-ISS-Capstone/Nekrosis",
     python_requires=">=3.6",
@@ -50,4 +76,12 @@ setup(
     py_modules=["nekrosis"],
     include_package_data=True,
     install_requires=open("requirements.txt", "r").readlines(),
+    classifiers=[
+        "Programming Language :: Python :: 3",
+        "License :: OSI Approved :: BSD License",
+        "Operating System :: MacOS :: MacOS X",
+        "Operating System :: Microsoft :: Windows",
+        "Operating System :: POSIX :: Linux",
+        status_to_classifier(fetch_property("__status__:")),
+    ],
 )

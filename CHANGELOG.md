@@ -11,6 +11,7 @@
   - `JSON`
   - `XML`
   - `PLIST`
+- Add support for specifying persistence method as index in addition to name.
 
 ## 0.0.1
 - Initial release.
