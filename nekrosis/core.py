@@ -10,7 +10,6 @@ import sys
 import ctypes
 import logging
 import argparse
-import requests
 
 from pathlib import Path
 
@@ -23,6 +22,8 @@ from .support.macos   import MacPersistence
 
 from .support.export  import ExportPersistenceTypes, ExportPersistenceMethods
 
+if sys.platform != "darwin":
+    import requests
 
 
 SUPPORTED_HOSTS: dict = {
@@ -292,7 +293,7 @@ def main():
 
     args = parser.parse_args()
 
-    if args.download_payload:
+    if args.download_payload and sys.platform != "darwin":
         nekrosis = Nekrosis(payload=args.download_payload, custom_method=args.method)
         if nekrosis.download_payload(args.download_payload):
             nekrosis.change_payload("download")
