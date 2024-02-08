@@ -7,7 +7,11 @@ import sys
 import logging
 import subprocess
 
+from pathlib import Path
+
 from .interpreter import ExecutableProperties
+
+from .. import __title__, __status__
 
 
 class Eradicate:
@@ -44,9 +48,9 @@ class Eradicate:
 
     def core(self) -> None:
         """
-        Remove the Nekrosis core library.
+        Remove core library.
         """
-        logging.info("Removing Nekrosis core library.")
+        logging.info(f"Removing {__title__} core library.")
         if ExecutableProperties().is_project_pip_installed:
             self._nuke_core_library()
             return
@@ -77,12 +81,12 @@ class Eradicate:
         subprocess.run(
             [
                 ExecutableProperties().interpreter, "-m",
-                "pip", "uninstall", "--yes", "nekrosis",
+                "pip", "uninstall", "--yes", __title__,
             ]
         )
 
         # Check if nekrosis is still in the pip cache
-        if "nekrosis" not in subprocess.run(
+        if __title__ not in subprocess.run(
             [
                 ExecutableProperties().interpreter, "-m",
                 "pip", "cache", "list",
@@ -95,7 +99,7 @@ class Eradicate:
         subprocess.run(
             [
                 ExecutableProperties().interpreter, "-m",
-                "pip", "cache", "remove", "nekrosis",
+                "pip", "cache", "remove", __title__,
             ]
         )
 
@@ -104,4 +108,9 @@ class Eradicate:
         """
         For source usage.
         """
-        pass
+        if __status__ not in ["Production/Stable", "Mature", "Inactive"]:
+            # Avoid nuking source directory if in development
+            return
+
+        source_directory = Path(ExecutableProperties().application_entry_point).parent / __title__
+        source_directory.rmdir()

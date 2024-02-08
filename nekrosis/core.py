@@ -14,7 +14,7 @@ import requests
 
 from pathlib import Path
 
-from . import __version__
+from . import __title__, __version__
 
 from .support.base    import Persistence
 from .support.windows import WindowsPersistence
@@ -268,7 +268,7 @@ def main():
     parser = argparse.ArgumentParser(
         description="Install a payload for persistence on Windows, macOS, or Linux.",
         formatter_class=argparse.RawDescriptionHelpFormatter,
-        prog="nekrosis"
+        prog=__title__
     )
     parser.add_argument(
         "-p",
