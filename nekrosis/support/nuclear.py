@@ -81,6 +81,16 @@ class Eradicate:
             ]
         )
 
+        # Check if nekrosis is still in the pip cache
+        if "nekrosis" not in subprocess.run(
+            [
+                ExecutableProperties().interpreter, "-m",
+                "pip", "cache", "list",
+            ],
+            capture_output=True, text=True,
+        ).stdout:
+            return
+
         # Remove cached files
         subprocess.run(
             [
