@@ -50,6 +50,8 @@ class Nekrosis:
         - recommended_persistence_method()
         - current_privilege_level_str()
         - is_admin()
+        - export_persistence_methods()
+        - nuke()
     """
 
     def __init__(self, payload: str, custom_method: str = None, nuke: bool = False) -> None:
