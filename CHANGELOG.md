@@ -19,7 +19,7 @@
   - `__url__`
   - `__status__`
   - `__author_email__`
-
+- Add support for providing payload as a URL.
 
 ## 0.0.1
 - Initial release.
