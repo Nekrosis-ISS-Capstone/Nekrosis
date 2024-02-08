@@ -58,6 +58,7 @@ $ nekrosis (-h | --help)
 >>>                         List the supported persistence methods for the current OS.
 >>>   -e {xml,json,plist}, --export {xml,json,plist}
 >>>                         Export the supported persistence methods to STDOUT in the specified format.
+>>>   -n, --nuke            Remove all traces of Nekrosis and the original payload.
 ```
 
 ### Executable - Install Payload
