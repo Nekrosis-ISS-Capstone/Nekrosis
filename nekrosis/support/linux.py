@@ -5,6 +5,7 @@ linux.py: Linux-specific persistence logic.
 from .base import Persistence
 from .linux_utilities.persistence_methods import LinuxPersistenceMethods
 from .linux_utilities.rootCronJob import InjectCronjob
+from .unix_utilities.permissions import UnixPrivilege
 
 class LinuxPersistence(Persistence):
     """
@@ -12,7 +13,6 @@ class LinuxPersistence(Persistence):
 
     identifier: Effective user ID of the user to install the payload as.
     """
-
     def __init__(self, payload: str, identifier: int, custom_method: str = None) -> None:
         super().__init__(payload, identifier, custom_method)
 
@@ -28,7 +28,7 @@ class LinuxPersistence(Persistence):
 
     def _determine_recommended_persistence_method(self) -> str:
 
-        if self.identifier == 0:
+        if self.identifier == UnixPrivilege.ROOT.value:
             return LinuxPersistenceMethods.ROOTCRONJOB.value
 
         return super()._determine_recommended_persistence_method()

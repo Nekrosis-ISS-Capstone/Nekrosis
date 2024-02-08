@@ -8,6 +8,7 @@ from .base import Persistence
 from .macos_utilities.electron import SearchElectron
 from .macos_utilities.launch_service import LaunchService
 from .macos_utilities.persistence_methods import MacPersistenceMethods
+from .unix_utilities.permissions          import UnixPrivilege
 
 if platform.system() == "Darwin":
     import py_sip_xnu
@@ -53,7 +54,7 @@ class MacPersistence(Persistence):
             return MacPersistenceMethods.LAUNCH_AGENT_ELECTRON.value
 
         # If we lack root access, we can only use user-level persistence methods.
-        if self.identifier != 0:
+        if self.identifier != UnixPrivilege.ROOT.value:
             return MacPersistenceMethods.LAUNCH_AGENT_USER.value
 
         if py_sip_xnu and py_sip_xnu.SipXnu().sip_object.can_edit_root is True:
@@ -67,11 +68,11 @@ class MacPersistence(Persistence):
         Get a list of supported persistence methods for macOS.
         """
         methods = [method.value for method in MacPersistenceMethods]
-        if self.identifier != 0:
+        if self.identifier != UnixPrivilege.ROOT.value:
             methods.remove(MacPersistenceMethods.LAUNCH_DAEMON_LIBRARY.value)
             methods.remove(MacPersistenceMethods.LAUNCH_AGENT_LIBRARY.value)
 
-        if self.identifier != 0 or not py_sip_xnu or py_sip_xnu.SipXnu().sip_object.can_edit_root is False:
+        if self.identifier != UnixPrivilege.ROOT.value or not py_sip_xnu or py_sip_xnu.SipXnu().sip_object.can_edit_root is False:
             methods.remove(MacPersistenceMethods.LAUNCH_DAEMON_SYSTEM.value)
             methods.remove(MacPersistenceMethods.LAUNCH_AGENT_SYSTEM.value)
 
