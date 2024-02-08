@@ -13,6 +13,13 @@
   - `PLIST`
 - Add support for specifying persistence method as index in addition to name.
 - Add new `-n/--nuke` option to delete payload and Nekrosis on exit.
+- Publish new project metadata:
+  - `__title__`
+  - `__description__`
+  - `__url__`
+  - `__status__`
+  - `__author_email__`
+
 
 ## 0.0.1
 - Initial release.

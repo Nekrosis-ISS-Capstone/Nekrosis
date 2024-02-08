@@ -54,13 +54,13 @@ def status_to_classifier(status: str) -> str:
 setup(
     name="nekrosis",
     version=fetch_property("__version__:"),
-    description="Multi-platform persistence toolkit for user-provided payloads.",
+    description=fetch_property("__description__:"),
     long_description_content_type="text/markdown",
     long_description=open("README.md", "r").read(),
     author=fetch_property("__author__:"),
     author_email=fetch_property("__author_email__:"),
     license=fetch_property("__license__:"),
-    url="https://github.com/Nekrosis-ISS-Capstone/Nekrosis",
+    url=fetch_property("__url__:"),
     python_requires=">=3.6",
     packages=find_packages(include=["nekrosis", "nekrosis.support", "nekrosis.support.*"]),
     package_data={
