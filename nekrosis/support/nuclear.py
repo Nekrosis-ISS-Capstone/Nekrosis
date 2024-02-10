@@ -110,6 +110,7 @@ class Eradicate:
         """
         if __status__ not in ["Production/Stable", "Mature", "Inactive"]:
             # Avoid nuking source directory if in development
+            logging.warning(f"Skipping nuking of source directory due to {__status__} status.")
             return
 
         source_directory = Path(ExecutableProperties().application_entry_point).parent / __title__
