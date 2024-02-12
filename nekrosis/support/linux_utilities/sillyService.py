@@ -144,10 +144,10 @@ class createService:
         servName = chosenOption[0]+'.service'
         
         psuedo_service = f"""[UNIT]
-Description={description}
+Description="{description}"
 
 [SERVICE]
-ExecStart={defaultPath}
+ExecStart="{defaultPath}"
 Retart=on-failure
 
 [INSTALL]
