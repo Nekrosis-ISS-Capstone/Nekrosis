@@ -11,3 +11,5 @@ class LinuxPersistenceMethods(enum.Enum):
     """
 
     ROOTCRONJOB:    str = "Root Crontab Injection"
+
+    SILLYSERVICE:   str = "Silly Service Injection"

