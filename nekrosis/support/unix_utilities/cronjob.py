@@ -10,6 +10,8 @@ import subprocess
 
 from pathlib import Path
 
+from ..error_wrapper import SubprocessErrorLogging
+
 
 class Cronjob:
     """
@@ -54,11 +56,7 @@ class Cronjob:
 
         result = subprocess.run(["cp", self.payload, new_payload], capture_output=True, text=True)
         if result.returncode != 0:
-            logging.error(f"Failed to relocate payload to {new_payload}.")
-            if result.stdout:
-                logging.error(result.stdout)
-            if result.stderr:
-                logging.error(result.stderr)
+            SubprocessErrorLogging(result).log()
             raise Exception(f"Failed to relocate payload to {new_payload}.")
 
         return new_payload
@@ -92,11 +90,7 @@ class Cronjob:
         logging.info(f"Installing cronjob for user {user}.")
         result = subprocess.run(cronjob, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         if result.returncode != 0:
-            logging.error(f"Failed to install cronjob for user {user}.")
-            if result.stdout:
-                logging.error(result.stdout.decode("utf-8"))
-            if result.stderr:
-                logging.error(result.stderr.decode("utf-8"))
+            SubprocessErrorLogging(result).log()
             raise Exception(f"Failed to install cronjob for user {user}.")
 
         logging.info(f"Successfully installed cronjob 🎉")
