@@ -4,6 +4,7 @@ cronjob.py: Unix-specific cronjob logic.
 import os
 import sys
 import random
+import getpass
 import logging
 import subprocess
 
@@ -22,7 +23,11 @@ class Cronjob:
         """
         Get the current user's username.
         """
-        return os.getlogin()
+        try:
+            return os.getlogin()
+        except OSError:
+            # Reference: https://bugs.python.org/issue40821
+            return getpass.getuser()
 
 
     def _root_user(self) -> str:
