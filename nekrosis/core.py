@@ -341,7 +341,3 @@ def main():
             if nekrosis.download_payload(args.payload) is False:
                 sys.exit(1)
         nekrosis.install()
-
-
-if __name__ == "__main__":
-    main()
