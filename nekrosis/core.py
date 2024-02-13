@@ -321,25 +321,27 @@ def main():
 
     args = parser.parse_args()
 
-    if args.payload:
-            if args.payload.startswith("http://") or args.payload.startswith("https://"):
-                nekrosis = Nekrosis(payload=args.payload, custom_method=args.method, nuke=args.nuke, silent=args.silent)
-                if nekrosis.download_payload(args.payload):
-                    nekrosis.change_payload("download")
-                    nekrosis.install()
-            else:
-                nekrosis = Nekrosis(payload=args.payload, custom_method=args.method, nuke=args.nuke, silent=args.silent)
+    payload = args.payload
+    if args.payload is None and (args.list_supported_methods or args.export):
+        # Set payload to self to avoid errors
+        # When listing or exporting, the payload is not used
+        payload = sys.argv[0]
 
-                if args.list_supported_methods or args.export:
-                    if args.export:
-                        print(nekrosis.export_persistence_methods(ExportPersistenceTypes(args.export)), end="")
-                    else:
-                        nekrosis._list_supported_persistence_methods()
-                else:
-                    nekrosis.install()
-    else:
+    if payload is None:
         parser.print_help()
         sys.exit(0)
+
+    nekrosis = Nekrosis(payload=payload, custom_method=args.method, nuke=args.nuke, silent=args.silent)
+    if args.list_supported_methods:
+        nekrosis._list_supported_persistence_methods()
+    elif args.export:
+        print(nekrosis.export_persistence_methods(ExportPersistenceTypes(args.export)), end="")
+    else:
+        if any([args.payload.startswith(f"{protocol}://") for protocol in ["http", "https", "ftp", "ftps"]]):
+            if nekrosis.download_payload(args.payload) is False:
+                sys.exit(1)
+        nekrosis.install()
+
 
 if __name__ == "__main__":
     main()
