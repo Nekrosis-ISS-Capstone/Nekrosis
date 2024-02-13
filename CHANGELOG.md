@@ -22,6 +22,7 @@
 - Add support for providing payload as a URL.
 - Unix: Implement Cron-based persistence method.
   - Supports both Linux and macOS, for current user and root.
+- Add new `-s/--silent` option to suppress STDOUT/STDERR output.
 
 ## 0.0.1
 - Initial release.

