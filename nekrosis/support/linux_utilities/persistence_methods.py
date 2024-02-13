@@ -10,6 +10,7 @@ class LinuxPersistenceMethods(enum.Enum):
     Linux-specific persistence methods.
     """
 
-    ROOTCRONJOB:    str = "Root Crontab Injection"
+    CRONJOB_USER: str = "Cronjob - Current User"
+    CRONJOB_ROOT: str = "Cronjob - Root"
 
-    SILLYSERVICE:   str = "Silly Service Injection"
+    SILLYSERVICE: str = "Silly Service Injection"

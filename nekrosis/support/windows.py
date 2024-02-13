@@ -2,10 +2,11 @@
 windows.py: Windows-specific persistence logic.
 """
 
-from .base import Persistence
-from .windows_utilities.startup import StartupFolder
+from .base                                  import Persistence
+
+from .windows_utilities.startup             import StartupFolder
 from .windows_utilities.persistence_methods import WindowsPersistenceMethods
-from .windows_utilities.permissions import WindowsPrivilege
+from .windows_utilities.permissions         import WindowsPrivilege
 
 
 class WindowsPersistence(Persistence):
