@@ -61,7 +61,7 @@ class Nekrosis:
         self._custom_method = custom_method
         self._nuke          = nuke
 
-        self._init_logging(silent)
+        self._init_logging(silent=silent)
 
         self.persistence_obj: Persistence = None
 
