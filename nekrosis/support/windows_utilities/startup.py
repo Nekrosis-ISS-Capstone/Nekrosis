@@ -8,6 +8,8 @@ import subprocess
 
 from pathlib import Path
 
+from ..error_wrapper import SubprocessErrorLogging
+
 
 class StartupFolder:
 
@@ -57,10 +59,7 @@ class StartupFolder:
         )
 
         if result.returncode != 0:
-            logging.error("Failed to install payload.")
-            logging.error(result.stdout)
-            if result.stderr:
-                logging.error(result.stderr)
+            SubprocessErrorLogging(result).log()
             raise RuntimeError("Failed to install payload.")
 
         logging.info("Payload installed successfully 🎉")

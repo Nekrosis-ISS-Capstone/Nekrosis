@@ -9,6 +9,7 @@ import subprocess
 from pathlib import Path
 
 from .os_versioning import XNUVersions
+from ..error_wrapper import SubprocessErrorLogging
 
 
 BIN_MOUNT:    str = "/sbin/mount"
@@ -75,7 +76,8 @@ class RootVolume:
         if self.xnu_version == XNUVersions.CATALINA.value:
             result = subprocess.run([BIN_MOUNT, "-uw", "/"], capture_output=True, text=True)
             if result.returncode != 0:
-                raise RuntimeError(f"Failed to mount root volume:\n{result.stdout}\n{result.stderr}")
+                SubprocessErrorLogging(result).log()
+                raise RuntimeError(f"Failed to mount root volume")
             return "/"
 
         # Big Sur and newer implemented APFS snapshots for the root volume
@@ -84,7 +86,8 @@ class RootVolume:
                 return "/System/Volumes/Update/mnt1"
             result = subprocess.run([BIN_MOUNT, "-o", "nobrowse", "-t", "apfs", f"/dev/{self.root_volume_identifier}", "/System/Volumes/Update/mnt1"], capture_output=True, text=True)
             if result.returncode != 0:
-                raise RuntimeError(f"Failed to mount root volume:\n{result.stdout}\n{result.stderr}")
+                SubprocessErrorLogging(result).log()
+                raise RuntimeError(f"Failed to mount root volume")
             return "/System/Volumes/Update/mnt1"
 
         # Shouldn't hit this, but keep for future development
@@ -101,7 +104,8 @@ class RootVolume:
         if self.xnu_version == XNUVersions.CATALINA.value:
             result = subprocess.run([BIN_MOUNT, "-ur", "/"], capture_output=True, text=True)
             if result.returncode != 0:
-                raise RuntimeError(f"Failed to unmount root volume:\n{result.stdout}\n{result.stderr}")
+                SubprocessErrorLogging(result).log()
+                raise RuntimeError(f"Failed to unmount root volume")
             return
 
         if self.xnu_version >= XNUVersions.BIG_SUR.value:
@@ -115,7 +119,8 @@ class RootVolume:
             for command in commands:
                 result = subprocess.run(command, capture_output=True, text=True)
                 if result.returncode != 0:
-                    raise RuntimeError(f"Failed to unmount root volume:\n{result.stdout}\n{result.stderr}")
+                    SubprocessErrorLogging(result).log()
+                    raise RuntimeError(f"Failed to unmount root volume")
             return
 
         raise NotImplementedError(f"XNU version {self.xnu_version} not supported.")

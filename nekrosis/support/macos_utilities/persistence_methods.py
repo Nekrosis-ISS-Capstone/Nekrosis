@@ -22,3 +22,7 @@ class MacPersistenceMethods(enum.Enum):
     # Requires System Integrity Protection to be lowered.
     LAUNCH_AGENT_SYSTEM:   str = "LaunchAgent - System"
     LAUNCH_DAEMON_SYSTEM:  str = "LaunchDaemon - System"
+
+    # Requires root access.
+    CRONJOB_USER:          str = "Cronjob - Current User"
+    CRONJOB_ROOT:          str = "Cronjob - Root"

@@ -12,6 +12,7 @@ from pathlib import Path
 
 from .root_volume import RootVolume
 from .persistence_methods import MacPersistenceMethods
+from ..error_wrapper import SubprocessErrorLogging
 
 
 BIN_CP:        str = "/bin/cp"
@@ -78,9 +79,7 @@ class LaunchService:
         for command in commands:
             result = subprocess.run(command, capture_output=True, text=True)
             if result.returncode != 0:
-                logging.error(result.stdout)
-                if result.stderr:
-                    logging.error(result.stderr)
+                SubprocessErrorLogging(result).log()
                 return False
 
         return True
@@ -100,9 +99,7 @@ class LaunchService:
         for command in commands:
             result = subprocess.run(command, capture_output=True, text=True)
             if result.returncode != 0:
-                logging.error(result.stdout)
-                if result.stderr:
-                    logging.error(result.stderr)
+                SubprocessErrorLogging(result).log()
                 return False
 
         return True

