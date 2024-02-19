@@ -12,4 +12,4 @@ class WindowsPersistenceMethods(enum.Enum):
     REGEDIT_RUN:          str = "RUNKEY"
     STARTUP_CURRENT_USER: str = "Startup Folder (Current User)"
     STARTUP_GLOBAL:       str = "Startup Folder (Global)"
-    SHORTCUT_USER:        str = "test" #TODO: Change
+    SHORTCUT_USER:        str = "Shortcut (Current User)"
