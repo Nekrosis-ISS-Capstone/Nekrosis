@@ -8,6 +8,28 @@ Usage:
 from setuptools import setup, find_packages
 
 
+def resolve_readme() -> str:
+    """
+    README may reference local resources that PyPI does not have access to.
+    Thus resolve local resources to their remote counterparts.
+
+    Currently only the following resources are referenced in the README:
+    - AppIcon.png
+    - CONTRIBUTING.md
+
+    Returns:
+        The resolved README contents.
+    """
+    repo_base = fetch_property("__url__:")
+    repo_raw = repo_base.replace("github.com", "raw.githubusercontent.com")
+
+    contents = open("README.md", "r").read()
+    contents = contents.replace("src=\"resources/icons/AppIcon.png\"", f"src=\"{repo_raw}/main/resources/icons/AppIcon.png\"")
+    contents = contents.replace("[CONTRIBUTING.md](CONTRIBUTING.md)", f"[CONTRIBUTING.md]({repo_base}/blob/main/CONTRIBUTING.md)")
+
+    return contents
+
+
 def fetch_property(property: str) -> str:
     """
     Fetch a property from the main Nekrosis class.
@@ -56,7 +78,7 @@ setup(
     version=fetch_property("__version__:"),
     description=fetch_property("__description__:"),
     long_description_content_type="text/markdown",
-    long_description=open("README.md", "r").read(),
+    long_description=resolve_readme(),
     author=fetch_property("__author__:"),
     author_email=fetch_property("__author_email__:"),
     license=fetch_property("__license__:"),
