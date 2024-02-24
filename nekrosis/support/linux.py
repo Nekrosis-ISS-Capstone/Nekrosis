@@ -27,7 +27,7 @@ class LinuxPersistence(Persistence):
         self.temp_dir
         self.recommended_method
 
-        super().__post_init__()                 # called to find the recommended persistence method.
+        super().__post_init__()
 
 
     def _determine_recommended_persistence_method(self) -> str:
