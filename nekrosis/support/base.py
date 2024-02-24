@@ -67,9 +67,9 @@ class Persistence:
         """
         Convert an index to a method.
         """
-        if index <= 1 or index > len(methods) - 1:
-            raise ValueError(f"Index {index} is out of range (1-{len(methods) - 1}).")
-        return methods[index - 1]
+        if index < 0 or index > len(methods) - 1:
+            raise ValueError(f"Index {index} is out of range (0-{len(methods) - 1}).")
+        return methods[index]
 
 
     def install(self) -> None:
