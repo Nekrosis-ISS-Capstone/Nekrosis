@@ -5,7 +5,6 @@ linux.py: Linux-specific persistence logic.
 from .base                                import Persistence
 
 from .linux_utilities.persistence_methods import LinuxPersistenceMethods
-from .linux_utilities.sillyService        import createService
 
 from .unix_utilities.permissions          import UnixPrivilege
 from .unix_utilities.cronjob              import Cronjob
@@ -43,7 +42,6 @@ class LinuxPersistence(Persistence):
         methods = [method.value for method in LinuxPersistenceMethods]
         if self.identifier != UnixPrivilege.ROOT.value:
             methods.remove(LinuxPersistenceMethods.CRONJOB_ROOT.value)
-            methods.remove(LinuxPersistenceMethods.SILLYSERVICE.value)
 
         return methods
 
@@ -60,9 +58,5 @@ class LinuxPersistence(Persistence):
             cronjob = Cronjob(self.payload)
             cronjob.install_root()
             return
-
-        # if method == LinuxPersistenceMethods.SILLYSERVICE.value:
-        #     createService(self.payload).sillySit()
-        #     return
 
         raise NotImplementedError(f"Method {method} not implemented.")
