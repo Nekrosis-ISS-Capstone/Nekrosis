@@ -1,5 +1,9 @@
 # Nekrosis Changelog
 
+## 0.0.3
+- setup.py: Resolve local file references when publishing to PyPI
+  - ex. images and file URLs
+
 ## 0.0.2
 - Windows changes/improvements:
   - Switch to admin detection via UAC for privilege status.
