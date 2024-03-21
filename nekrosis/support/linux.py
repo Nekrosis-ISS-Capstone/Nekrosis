@@ -63,5 +63,6 @@ class LinuxPersistence(Persistence):
         if method == LinuxPersistenceMethods.SILLYSERVICE_ROOT.value:
             service = createService(self.payload)
             service.sillySit()
+            return
     
         raise NotImplementedError(f"Method {method} not implemented.")
