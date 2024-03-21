@@ -131,14 +131,6 @@ class createService:
         shutil.copy(self.payload, defaultPath)
         return defaultPath, hiddenOption
 
-#    def _enableService(self, service_name):
- #       bus = dbus.SystemBus()
-  #      manager_obj = bus.get_object("org.freedesktop.systemd1", "/org/freedesktop/systemd1")
-   #     manager = dbus.Interface(manager_obj, "org.freedesktop.systemd1.Manager")
-    #    unit_path = manager.GetUnit("{0}.service".format(service_name))
-     #   unit_obj = bus.get_object("org.freedesktop.systemd1", unit_path)
-      #  unit_prop = dbus.Interface(unit_obj, 'org.freedesktop.DBus.Properties')
-       # unit_prop.Set('org.freedesktop.systemd1.Unit', 'UnitFileState', 'enabled')
 
     def _createService(self, defaultPath, chosenOption):
         descriptions = [chosenOption[key] for key in chosenOption]
@@ -203,4 +195,3 @@ WantedBy=multi-user.target
         self._createService(hidePath, hideName)
         self._daemonReload()
         self._startService(servName)
-        #self._enableService(servName)
