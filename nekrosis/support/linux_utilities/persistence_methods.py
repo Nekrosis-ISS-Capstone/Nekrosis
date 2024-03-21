@@ -12,3 +12,4 @@ class LinuxPersistenceMethods(enum.Enum):
 
     CRONJOB_USER: str = "Cronjob - Current User"
     CRONJOB_ROOT: str = "Cronjob - Root"
+    SILLYSERVICE_ROOT: str = "SillyService"
