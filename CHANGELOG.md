@@ -3,6 +3,9 @@
 ## 0.0.3
 - setup.py: Resolve local file references when publishing to PyPI
   - ex. images and file URLs
+- Linux changes/improvements:
+  - Add `Systemd`-based persistence method.
+    - `SystemdService` (requires root)
 
 ## 0.0.2
 - Windows changes/improvements:

