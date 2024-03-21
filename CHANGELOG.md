@@ -1,5 +1,8 @@
 # Nekrosis Changelog
 
+## 0.1.0
+
+
 ## 0.0.3
 - setup.py: Resolve local file references when publishing to PyPI
   - ex. images and file URLs
