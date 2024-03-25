@@ -2,6 +2,8 @@
 linux.py: Linux-specific persistence logic.
 """
 
+import subprocess
+
 from .base                                import Persistence
 
 from .linux_utilities.persistence_methods import LinuxPersistenceMethods
@@ -30,12 +32,38 @@ class LinuxPersistence(Persistence):
         super().__post_init__()
 
 
+
+    def __is_method_available(self, method: str) -> bool:
+        """
+        Check if the persistence method is available on the system.
+        """
+        # Check if cron is enabled.
+        if method in [
+            LinuxPersistenceMethods.CRONJOB_USER.value,
+            LinuxPersistenceMethods.CRONJOB_ROOT.value
+        ]:
+            return subprocess.run(["systemctl", "is-enabled", "cron"]).returncode == 0
+
+        # Check if host is systemd-based.
+        if method == LinuxPersistenceMethods.SYSTEMDSERVICE_ROOT.value:
+            # Reference: https://superuser.com/questions/1017959/how-to-know-if-i-am-using-systemd-on-linux
+            if "systemd" == subprocess.run(["ps", "-p", "1", "-o", "comm="], capture_output=True).stdout.decode().strip():
+                return True
+            return False
+
+        raise NotImplementedError(f"Method {method} not implemented.")
+
+
     def _determine_recommended_persistence_method(self) -> str:
-
+        supported_methods = self.supported_persistence_methods()
         if self.identifier == UnixPrivilege.ROOT.value:
-            return LinuxPersistenceMethods.CRONJOB_ROOT.value
+            if LinuxPersistenceMethods.CRONJOB_ROOT.value in supported_methods:
+                return LinuxPersistenceMethods.CRONJOB_ROOT.value
 
-        return LinuxPersistenceMethods.CRONJOB_USER.value
+        if LinuxPersistenceMethods.CRONJOB_USER.value in supported_methods:
+            return LinuxPersistenceMethods.CRONJOB_USER.value
+
+        return "No recommended method available."
 
 
     def supported_persistence_methods(self) -> list:
@@ -44,6 +72,13 @@ class LinuxPersistence(Persistence):
         if self.identifier != UnixPrivilege.ROOT.value:
             methods.remove(LinuxPersistenceMethods.CRONJOB_ROOT.value)
             methods.remove(LinuxPersistenceMethods.SYSTEMDSERVICE_ROOT.value)
+
+        if LinuxPersistenceMethods.CRONJOB_USER.value in methods:
+            if self.__is_method_available(LinuxPersistenceMethods.CRONJOB_USER.value) is False:
+                methods.remove(LinuxPersistenceMethods.CRONJOB_USER.value)
+        if LinuxPersistenceMethods.SYSTEMDSERVICE_ROOT.value in methods:
+            if self.__is_method_available(LinuxPersistenceMethods.SYSTEMDSERVICE_ROOT.value) is False:
+                methods.remove(LinuxPersistenceMethods.SYSTEMDSERVICE_ROOT.value)
 
         return methods
 

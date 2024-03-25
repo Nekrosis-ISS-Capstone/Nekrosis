@@ -35,10 +35,15 @@ class WindowsPersistence(Persistence):
         """
         Determine the recommended persistence method for Windows.
         """
-        if self.identifier == WindowsPrivilege.STANDARD_USER.value:
-            return WindowsPersistenceMethods.STARTUP_CURRENT_USER.value
+        supported_methods = self.supported_persistence_methods()
+        if WindowsPersistenceMethods.STARTUP_GLOBAL.value in supported_methods:
+            if self.identifier == WindowsPrivilege.STANDARD_USER.value:
+                return WindowsPersistenceMethods.STARTUP_CURRENT_USER.value
 
-        return WindowsPersistenceMethods.STARTUP_GLOBAL.value
+        if WindowsPersistenceMethods.REGEDIT_RUN.value in supported_methods:
+            return WindowsPersistenceMethods.REGEDIT_RUN.value
+
+        return "No recommended method available."
 
 
     def supported_persistence_methods(self) -> list:

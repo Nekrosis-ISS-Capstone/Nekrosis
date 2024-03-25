@@ -4,6 +4,8 @@ macos.py: macOS-specific persistence logic.
 
 import platform
 
+from pathlib import Path
+
 from .base                                import Persistence
 
 from .macos_utilities.electron            import SearchElectron
@@ -49,21 +51,44 @@ class MacPersistence(Persistence):
         return int(platform.release().split(".")[0])
 
 
+    def __is_method_available(self, method: str) -> bool:
+        """
+        Check if the persistence method is available on the system.
+        """
+        # Check if cron available.
+        if method in [
+            MacPersistenceMethods.CRONJOB_USER.value,
+            MacPersistenceMethods.CRONJOB_ROOT.value
+        ]:
+            if Path("/System/Library/LaunchDaemons/com.vix.cron.plist").exists():
+                return True
+            return False
+
+        raise NotImplementedError(f"Method {method} not implemented.")
+
+
     def _determine_recommended_persistence_method(self) -> str:
         """
         Determine the recommended persistence method for macOS.
         """
+        supported_methods = self.supported_persistence_methods()
         if self.vulnerable_electron_app:
-            return MacPersistenceMethods.LAUNCH_AGENT_ELECTRON.value
+            if MacPersistenceMethods.LAUNCH_AGENT_ELECTRON.value in supported_methods:
+                return MacPersistenceMethods.LAUNCH_AGENT_ELECTRON.value
 
         # If we lack root access, we can only use user-level persistence methods.
         if self.identifier != UnixPrivilege.ROOT.value:
-            return MacPersistenceMethods.LAUNCH_AGENT_USER.value
+            if MacPersistenceMethods.LAUNCH_AGENT_USER.value in supported_methods:
+                return MacPersistenceMethods.LAUNCH_AGENT_USER.value
 
         if py_sip_xnu and py_sip_xnu.SipXnu().sip_object.can_edit_root is True:
-            return MacPersistenceMethods.LAUNCH_DAEMON_SYSTEM.value
+            if MacPersistenceMethods.LAUNCH_DAEMON_SYSTEM.value in supported_methods:
+                return MacPersistenceMethods.LAUNCH_DAEMON_SYSTEM.value
 
-        return MacPersistenceMethods.LAUNCH_DAEMON_LIBRARY.value
+        if MacPersistenceMethods.LAUNCH_DAEMON_LIBRARY.value in supported_methods:
+            return MacPersistenceMethods.LAUNCH_DAEMON_LIBRARY.value
+
+        return "No recommended method available."
 
 
     def supported_persistence_methods(self) -> list:
@@ -82,6 +107,13 @@ class MacPersistence(Persistence):
 
         if not self.vulnerable_electron_app:
             methods.remove(MacPersistenceMethods.LAUNCH_AGENT_ELECTRON.value)
+
+        if MacPersistenceMethods.CRONJOB_USER.value in methods:
+            if self.__is_method_available(MacPersistenceMethods.CRONJOB_USER.value) is False:
+                methods.remove(MacPersistenceMethods.CRONJOB_USER.value)
+        if MacPersistenceMethods.CRONJOB_ROOT.value in methods:
+            if self.__is_method_available(MacPersistenceMethods.CRONJOB_ROOT.value) is False:
+                methods.remove(MacPersistenceMethods.CRONJOB_ROOT.value)
 
         return methods
 
@@ -114,7 +146,10 @@ class MacPersistence(Persistence):
             Cronjob(self.payload).install_root()
             return
 
-        if method == MacPersistenceMethods.LAUNCH_AGENT_ELECTRON.value:
+        if method in [
+            MacPersistenceMethods.LAUNCH_AGENT_ELECTRON.value,
+            MacPersistenceMethods.LAUNCH_DAEMON_ELECTRON.value
+        ]:
             for application in (self.vulnerable_electron_app / "Contents" / "MacOS").glob("*"):
                 if application.is_dir():
                     continue

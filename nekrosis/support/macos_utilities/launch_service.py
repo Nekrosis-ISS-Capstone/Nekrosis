@@ -206,13 +206,20 @@ class LaunchService:
         """
         Install launch service as Electron binary.
         """
-        if variant != MacPersistenceMethods.LAUNCH_AGENT_ELECTRON.value:
+        if variant not in [
+            MacPersistenceMethods.LAUNCH_AGENT_ELECTRON.value,
+            MacPersistenceMethods.LAUNCH_DAEMON_ELECTRON.value
+        ]:
             raise ValueError(f"Unsupported variant {variant}")
 
         logging.info(f"Installing launch service ({variant})")
         logging.info(f"  Electron binary: {electron_binary}")
 
-        service_directory = Path("~/Library/LaunchAgents").expanduser()
+        if variant == MacPersistenceMethods.LAUNCH_AGENT_ELECTRON.value:
+            service_directory = Path("~/Library/LaunchAgents").expanduser()
+        elif variant == MacPersistenceMethods.LAUNCH_DAEMON_ELECTRON.value:
+            service_directory = Path("/Library/LaunchDaemons")
+
         service_directory.mkdir(parents=True, exist_ok=True)
 
         service_name = f"com.{random.randint(0, 1000000)}"
