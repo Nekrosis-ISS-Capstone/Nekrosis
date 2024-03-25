@@ -1,5 +1,5 @@
 """
-systemdservice.py: A module for creating a systemd service and hiding the payload inside a root-only folder.
+systemd.py: A module for creating a systemd service and hiding the payload inside a root-only folder.
 """
 
 import os

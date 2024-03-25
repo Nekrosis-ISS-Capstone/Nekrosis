@@ -1,5 +1,5 @@
 """
-launch_service.py: macOS-specific launchd logic.
+launchd.py: macOS-specific launchd logic.
 """
 
 import os
@@ -10,9 +10,9 @@ import subprocess
 
 from pathlib import Path
 
-from .root_volume import RootVolume
+from .root_volume         import RootVolume
 from .persistence_methods import MacPersistenceMethods
-from ..error_wrapper import SubprocessErrorLogging
+from ..error_wrapper      import SubprocessErrorLogging
 
 
 BIN_CP:        str = "/bin/cp"

@@ -8,7 +8,7 @@ import subprocess
 
 from pathlib import Path
 
-from .os_versioning import XNUVersions
+from .os_versioning  import XNUVersions
 from ..error_wrapper import SubprocessErrorLogging
 
 

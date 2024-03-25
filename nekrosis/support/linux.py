@@ -7,7 +7,7 @@ import subprocess
 from .base                                import Persistence
 
 from .linux_utilities.persistence_methods import LinuxPersistenceMethods
-from .linux_utilities.systemdservice     import createService
+from .linux_utilities.systemd             import createService
 
 from .unix_utilities.permissions          import UnixPrivilege
 from .unix_utilities.cronjob              import Cronjob

@@ -9,7 +9,7 @@ from pathlib import Path
 from .base                                import Persistence
 
 from .macos_utilities.electron            import SearchElectron
-from .macos_utilities.launch_service      import LaunchService
+from .macos_utilities.launchd             import LaunchService
 from .macos_utilities.persistence_methods import MacPersistenceMethods
 
 from .unix_utilities.permissions          import UnixPrivilege
