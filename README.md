@@ -14,7 +14,7 @@ Note: This project is still in development, and is not yet ready for use.
 
 ## Installation
 
-### Precompiled Executables
+### Standalone Executables
 
 See [GitHub Release Tab](https://github.com/Nekrosis-ISS-Capstone/Nekrosis/releases/latest) for latest executables.
 
