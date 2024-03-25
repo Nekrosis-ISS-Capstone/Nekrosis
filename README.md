@@ -12,7 +12,20 @@ Please use irresponsibly.
 Note: This project is still in development, and is not yet ready for use.
 * For contributors, see [CONTRIBUTING.md](CONTRIBUTING.md) for project architecture and design.
 
-## Setup
+## Installation
+
+### Precompiled Executables
+
+See [GitHub Release Tab](https://github.com/Nekrosis-ISS-Capstone/Nekrosis/releases/latest) for latest executables.
+
+### Python Library - PyPI
+
+```sh
+python -m pip install nekrosis
+```
+
+
+### Source Code
 
 Requires Python 3.6 or newer, install from official website when applicable: [python.org](https://www.python.org/downloads/).
 
