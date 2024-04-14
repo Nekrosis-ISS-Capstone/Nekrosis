@@ -42,7 +42,7 @@ class LinuxPersistence(Persistence):
             LinuxPersistenceMethods.CRONJOB_USER.value,
             LinuxPersistenceMethods.CRONJOB_ROOT.value
         ]:
-            return subprocess.run(["systemctl", "is-enabled", "cron"]).returncode == 0
+            return subprocess.run(["systemctl", "is-enabled", "cron"], capture_output=True).returncode == 0
 
         # Check if host is systemd-based.
         if method == LinuxPersistenceMethods.SYSTEMDSERVICE_ROOT.value:

@@ -4,6 +4,7 @@
 - Linux changes/improvements:
   - Detect if `cron` is available before presenting it as an option.
   - Detect if distribution is `systemd`-based before presenting it as an option.
+  - Avoid printing cronjob status to STDOUT.
 - macOS changes/improvements:
   - Detect if `cron` is available before presenting it as an option.
   - Expanded Electron persistence method to support root persistence.
