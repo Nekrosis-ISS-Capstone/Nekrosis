@@ -32,7 +32,6 @@ class LinuxPersistence(Persistence):
         super().__post_init__()
 
 
-
     def __is_method_available(self, method: str) -> bool:
         """
         Check if the persistence method is available on the system.

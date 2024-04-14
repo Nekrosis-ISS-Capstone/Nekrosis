@@ -9,6 +9,8 @@
   - Detect if `cron` is available before presenting it as an option.
   - Expanded Electron persistence method to support root persistence.
     - LaunchDaemon - Electron
+- Windows changes/improvements:
+  - Add `Shortcut (Current User)` as recommended option
 
 ## 0.0.3
 - setup.py: Resolve local file references when publishing to PyPI

@@ -43,6 +43,10 @@ class WindowsPersistence(Persistence):
         if WindowsPersistenceMethods.REGEDIT_RUN.value in supported_methods:
             return WindowsPersistenceMethods.REGEDIT_RUN.value
 
+
+        if WindowsPersistenceMethods.SHORTCUT_USER.value in supported_methods:
+            return WindowsPersistenceMethods.SHORTCUT_USER.value
+
         return "No recommended method available."
 
 
