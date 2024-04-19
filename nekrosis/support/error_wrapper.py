@@ -95,9 +95,9 @@ class SubprocessErrorLogging:
         output += f"    Command: {self.process.args}\n"
         output += f"    Return Code: {self.process.returncode}\n"
         output += f"    Standard Output:\n"
-        output += self._format_output(self.process.stdout)
+        output += self._format_output(self.process.stdout.decode("utf-8"))
         output += f"    Standard Error:\n"
-        output += self._format_output(self.process.stderr)
+        output += self._format_output(self.process.stderr.decode("utf-8"))
 
         return output
 

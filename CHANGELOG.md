@@ -11,6 +11,8 @@
     - LaunchDaemon - Electron
 - Windows changes/improvements:
   - Add `Shortcut (Current User)` as recommended option
+- General changes/improvements:
+  - Resolve logging error with subprocess failures.
 
 ## 0.0.3
 - setup.py: Resolve local file references when publishing to PyPI
