@@ -11,13 +11,13 @@ Library usage:
 """
 
 __title__:        str = "nekrosis"
-__version__:      str = "0.1.0"
+__version__:      str = "1.0.0"
 __description__:  str = "Multi-platform persistence toolkit for user-provided payloads."
 __url__:          str = "https://github.com/Nekrosis-ISS-Capstone/Nekrosis"
 __license__:      str = "3-clause BSD License"
 __author__:       str = "Ezra Fast, Mitchell Nicholson, Mykola Grymalyuk, Scott Banister and Ulysses Hill"
 __author_email__: str = "nekrosis-capstone@protonmail.com"
-__status__:       str = "Alpha"
+__status__:       str = "Production/Stable"
 __all__:         list = ["Nekrosis"]
 
 from .core import Nekrosis, main

@@ -1,6 +1,6 @@
 # Nekrosis Changelog
 
-## 0.1.0
+## 1.0.0
 - Linux changes/improvements:
   - Detect if `cron` is available before presenting it as an option.
   - Detect if distribution is `systemd`-based before presenting it as an option.
@@ -13,6 +13,7 @@
   - Add `Shortcut (Current User)` as recommended option
 - General changes/improvements:
   - Resolve logging error with subprocess failures.
+  - Set project to `Production/Stable` status.
 
 ## 0.0.3
 - setup.py: Resolve local file references when publishing to PyPI
